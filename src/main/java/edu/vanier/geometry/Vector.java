@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package geometry;
+package edu.vanier.geometry;
 
 /**
  *
@@ -21,10 +21,23 @@ public class Vector {
         return new Vector(x + other.getX(), y + other.getY());
     }
     
+    public Vector scalarMultiply(double scalar){
+        return new Vector(scalar * x, scalar * y);
+    }
+    
     public Vector negative(){
         return new Vector(-x, -y);
     }
 
+    public Vector normalized(){
+        if (x == 0 && y == 0){
+            return this;
+        }
+        double norm = Math.sqrt(x * x + y * y);
+        System.out.println(norm);
+        return scalarMultiply(1/norm);
+    }
+    
     public double getX() {
         return x;
     }

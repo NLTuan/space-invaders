@@ -1,5 +1,6 @@
 package edu.vanier.spaceshooter.controllers;
 
+import edu.vanier.geometry.Vector;
 import edu.vanier.spaceshooter.models.Sprite;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -28,12 +29,17 @@ public class MainAppFXMLController {
     AnimationTimer gameLoop;
     
     private long lastNanoTime = System.nanoTime();
+    private double elapsedTime;
     private ArrayList<KeyCode> input;
 
+    private double enemySpeed = 10;
+    private double playerBulletSpeed = 20;
+    private double enemyBulletSpeed = 20;
+    
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
-        spaceShip = new Sprite(300, 750, 40, 40, "player", Color.BLUE);
+        spaceShip = new Sprite(300, 750, 40, 40, "player", Color.BLUE, 10);
         animationPanel.setPrefSize(600, 800);
         animationPanel.getChildren().add(spaceShip);
         
@@ -87,11 +93,13 @@ public class MainAppFXMLController {
     }
 
     private void generateInvaders() {
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 10; i++) {
             Sprite invader = new Sprite(
                     90 + i * 100,
                     150, 30, 30, "enemy",
-                    Color.RED);
+                    Color.RED,
+                    enemySpeed
+            );
             animationPanel.getChildren().add(invader);
         }
     }
@@ -127,28 +135,27 @@ public class MainAppFXMLController {
      * </p>
      */
     private void update(long now) {
-        double elapsedTime = (now - lastNanoTime) / 10000000;
+        elapsedTime = (now - lastNanoTime) / 10000000;
         // Actions to be performed during each frame of the animation.
+
+
+        Vector direction = new Vector(
+            boolToDouble(input.contains(KeyCode.D)) - boolToDouble(input.contains(KeyCode.A)),
+            boolToDouble(input.contains(KeyCode.S)) - boolToDouble(input.contains(KeyCode.W))
+        ).normalized();
+        
+        spaceShip.setDirection(direction);
+        
         getSprites().forEach(this::processSprite);
         removeDeadSprites();
-
-        if (input.contains(KeyCode.A)){
-            spaceShip.moveLeft();
-        }
-        if (input.contains(KeyCode.D)){
-            spaceShip.moveRight();
-        }
-        if (input.contains(KeyCode.S)){
-            spaceShip.moveDown();
-        }
-        if (input.contains(KeyCode.W)){
-            spaceShip.moveUp();
-        }
         lastNanoTime = System.nanoTime();
     }
 
     private void processSprite(Sprite sprite) {
+        sprite.setInternalClock(sprite.getInternalClock() + elapsedTime);
         switch (sprite.getType()) {
+            case "player" -> 
+                handlePlayer(sprite);
             case "enemybullet" ->
                 handleEnemyBullet(sprite);
             case "playerbullet" ->
@@ -158,8 +165,13 @@ public class MainAppFXMLController {
         }
     }
 
+    private void handlePlayer(Sprite sprite){
+        sprite.move(elapsedTime);
+
+    }
     private void handleEnemyBullet(Sprite sprite) {
-        sprite.moveDown();
+        sprite.setDirection(new Vector(0, 1));
+        sprite.move(elapsedTime);
         // Check for collision with the spaceship
         if (sprite.getBoundsInParent().intersects(spaceShip.getBoundsInParent())) {
             spaceShip.setDead(true);
@@ -168,7 +180,8 @@ public class MainAppFXMLController {
     }
 
     private void handlePlayerBullet(Sprite sprite) {
-        sprite.moveUp();
+        sprite.setDirection(new Vector(0, -1));
+        sprite.move(elapsedTime);
         for (Sprite enemy : getSprites()) {
             if (enemy.getType().equals("enemy")) {
                 // Check for collision with an enemy
@@ -181,11 +194,12 @@ public class MainAppFXMLController {
     }
 
     private void handleEnemyFiring(Sprite sprite) {
-//        if (elapsedTime > 2) {
-//            if (Math.random() < 0.3) {
-//                shoot(sprite);
-//            }
-//        }
+        if (sprite.getInternalClock() > sprite.CLOCK_RESET_VALUE) {
+            if (Math.random() < 0.3) {
+                shoot(sprite);
+            }
+            sprite.setInternalClock(0);
+        }
     }
 
     /**
@@ -221,7 +235,7 @@ public class MainAppFXMLController {
                 (int) firingEntity.getTranslateX() + 20,
                 (int) firingEntity.getTranslateY(),
                 5, 20,
-                firingEntity.getType() + "bullet", Color.BLACK);
+                firingEntity.getType() + "bullet", Color.BLACK, enemyBulletSpeed);
         animationPanel.getChildren().add(bullet);
     }
 
@@ -233,5 +247,9 @@ public class MainAppFXMLController {
         if (gameLoop != null) {
             gameLoop.stop();
         }
+    }
+    
+    private double boolToDouble(boolean bool){
+        return (bool)? 1.0: 0;
     }
 }
