@@ -30,16 +30,19 @@ public class MainAppFXMLController {
     
     private long lastNanoTime = System.nanoTime();
     private double elapsedTime;
+    private double totalElapsedTime;
+    
     private ArrayList<KeyCode> input;
 
+    private double playerSpeed = 100;
     private double enemySpeed = 10;
-    private double playerBulletSpeed = 20;
-    private double enemyBulletSpeed = 20;
+    private double playerBulletSpeed = 300;
+    private double enemyBulletSpeed = 300;
     
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
-        spaceShip = new Sprite(300, 750, 40, 40, "player", Color.BLUE, 10);
+        spaceShip = new Sprite(300, 750, 40, 40, "player", Color.BLUE, playerSpeed);
         animationPanel.setPrefSize(600, 800);
         animationPanel.getChildren().add(spaceShip);
         
@@ -135,7 +138,9 @@ public class MainAppFXMLController {
      * </p>
      */
     private void update(long now) {
-        elapsedTime = (now - lastNanoTime) / 10000000;
+        elapsedTime = (now - lastNanoTime) / 1E9;
+        totalElapsedTime += elapsedTime;
+        System.out.println(totalElapsedTime);
         // Actions to be performed during each frame of the animation.
 
 
@@ -154,14 +159,19 @@ public class MainAppFXMLController {
     private void processSprite(Sprite sprite) {
         sprite.setInternalClock(sprite.getInternalClock() + elapsedTime);
         switch (sprite.getType()) {
-            case "player" -> 
+            case "player":
                 handlePlayer(sprite);
-            case "enemybullet" ->
+                handlePlayerFiring(sprite);
+                break;
+            case "enemybullet" :
                 handleEnemyBullet(sprite);
-            case "playerbullet" ->
+                break;
+            case "playerbullet":
                 handlePlayerBullet(sprite);
-            case "enemy" ->
+                break;
+            case "enemy":
                 handleEnemyFiring(sprite);
+                break;
         }
     }
 
@@ -199,6 +209,16 @@ public class MainAppFXMLController {
                 shoot(sprite);
             }
             sprite.setInternalClock(0);
+        }
+    }
+    
+    private void handlePlayerFiring(Sprite sprite) {
+        if (sprite.getInternalClock() > sprite.CLOCK_RESET_VALUE) {
+            if (input.contains(KeyCode.SPACE)) {
+                shoot(sprite);
+                sprite.setInternalClock(0);
+
+            }
         }
     }
 
