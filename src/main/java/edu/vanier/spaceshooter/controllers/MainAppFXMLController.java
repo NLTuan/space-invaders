@@ -2,12 +2,14 @@ package edu.vanier.spaceshooter.controllers;
 
 import edu.vanier.spaceshooter.models.Sprite;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import org.slf4j.Logger;
@@ -21,10 +23,12 @@ public class MainAppFXMLController {
     private final static Logger logger = LoggerFactory.getLogger(MainAppFXMLController.class);
     @FXML
     private Pane animationPanel;
-    private double elapsedTime = 0;
     private Sprite spaceShip;
     private Scene mainScene;
     AnimationTimer gameLoop;
+    
+    private long lastNanoTime = System.nanoTime();
+    private ArrayList<KeyCode> input;
 
     @FXML
     public void initialize() {
@@ -32,6 +36,8 @@ public class MainAppFXMLController {
         spaceShip = new Sprite(300, 750, 40, 40, "player", Color.BLUE);
         animationPanel.setPrefSize(600, 800);
         animationPanel.getChildren().add(spaceShip);
+        
+        input = new ArrayList<>();
     }
 
     public void setupGameWorld() {
@@ -45,7 +51,7 @@ public class MainAppFXMLController {
         gameLoop = new AnimationTimer() {
             @Override
             public void handle(long now) {
-                update();
+                update(now);
             }
         };
         gameLoop.start();
@@ -66,15 +72,18 @@ public class MainAppFXMLController {
     private void setupKeyPressHandlers() {
         // e the key event containing information about the key pressed.
         mainScene.setOnKeyPressed(e -> {
-            switch (e.getCode()) {
-                case KeyCode.A ->
-                    spaceShip.moveLeft();
-                case KeyCode.D ->
-                    spaceShip.moveRight();
-                case KeyCode.SPACE ->
-                    shoot(spaceShip);
+            KeyCode code = e.getCode();
+            if (!input.contains(code)) {
+                input.add(code);
             }
         });
+        
+        mainScene.setOnKeyReleased((KeyEvent e) -> {
+            KeyCode code = e.getCode();
+            input.remove(code);
+        });
+        
+
     }
 
     private void generateInvaders() {
@@ -117,16 +126,25 @@ public class MainAppFXMLController {
      * is reset after a certain threshold.
      * </p>
      */
-    private void update() {
-        elapsedTime += 0.016;
+    private void update(long now) {
+        double elapsedTime = (now - lastNanoTime) / 10000000;
         // Actions to be performed during each frame of the animation.
         getSprites().forEach(this::processSprite);
         removeDeadSprites();
 
-        // Reset the elapsed time.
-        if (elapsedTime > 2) {
-            elapsedTime = 0;
+        if (input.contains(KeyCode.A)){
+            spaceShip.moveLeft();
         }
+        if (input.contains(KeyCode.D)){
+            spaceShip.moveRight();
+        }
+        if (input.contains(KeyCode.S)){
+            spaceShip.moveDown();
+        }
+        if (input.contains(KeyCode.W)){
+            spaceShip.moveUp();
+        }
+        lastNanoTime = System.nanoTime();
     }
 
     private void processSprite(Sprite sprite) {
@@ -163,11 +181,11 @@ public class MainAppFXMLController {
     }
 
     private void handleEnemyFiring(Sprite sprite) {
-        if (elapsedTime > 2) {
-            if (Math.random() < 0.3) {
-                shoot(sprite);
-            }
-        }
+//        if (elapsedTime > 2) {
+//            if (Math.random() < 0.3) {
+//                shoot(sprite);
+//            }
+//        }
     }
 
     /**
