@@ -37,10 +37,31 @@ public class MainAppFXMLController {
     private ArrayList<KeyCode> input;
 
     private double playerSpeed = 300;
-    private double enemySpeed = 10;
+    private double smallInvaderSpeed = 30;
+    private double mediumInvaderSpeed = 100;
+
     private double playerBulletSpeed = 1000;
     private double enemyBulletSpeed = 300;
-    
+
+    private int windowWidth = 600;
+    private int windowHeight = 800;
+
+    public int getWindowWidth() {
+        return windowWidth;
+    }
+
+    public void setWindowWidth(int windowWidth) {
+        this.windowWidth = windowWidth;
+    }
+
+    public int getWindowHeight() {
+        return windowHeight;
+    }
+
+    public void setWindowHeight(int windowHeight) {
+        this.windowHeight = windowHeight;
+    }
+
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
@@ -103,7 +124,18 @@ public class MainAppFXMLController {
                     90 + i * 100,
                     150, 30, 30, "enemy",
                     Color.RED,
-                    enemySpeed,
+                    smallInvaderSpeed,
+                    enemyBulletSpeed
+            );
+            animationPanel.getChildren().add(invader);
+        }
+
+        for (int i = 0; i < 10; i++) {
+            Sprite invader = new MediumInvader(
+                    90 + i * 100,
+                    200, 30, 30, "enemy",
+                    Color.BLUE,
+                    mediumInvaderSpeed,
                     enemyBulletSpeed
             );
             animationPanel.getChildren().add(invader);
@@ -226,8 +258,20 @@ public class MainAppFXMLController {
     private void handleEnemy(Sprite sprite) {
         sprite.move(elapsedTime);
         Invader invader = (Invader) sprite;
-        if (totalElapsedTime % invader.getFiringCooldown() < 0.01) {
+        if (totalElapsedTime % (invader.getMovementCooldown() + invader.getPauseCooldown()) < invader.getMovementCooldown()
+                && !invader.isMovementUpdated()
+        ) {
             invader.updateMovement();
+            invader.setMovementUpdated(true);
+            invader.setPauseUpdated(false);
+        }
+        else if (totalElapsedTime % (invader.getMovementCooldown() + invader.getPauseCooldown())
+                > invader.getMovementCooldown()
+            && !invader.isPauseUpdated()
+        ){
+            invader.setDirection(new Vector(0, 0));
+            invader.setPauseUpdated(true);
+            invader.setMovementUpdated(false);
         }
     }
 

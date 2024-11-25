@@ -51,4 +51,5 @@ public class SpaceShooterApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
+
 }

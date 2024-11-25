@@ -11,6 +11,7 @@ public class SmallInvader extends Invader{
         super(x, y, width, height, type, color, speed, bulletSpeed);
         setFiringCooldown(0.5);
         setMovementCooldown(2);
+        setPauseCooldown(0.8);
     }
 
     public ArrayList<Sprite> shoot() {
