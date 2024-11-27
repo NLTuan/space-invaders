@@ -5,6 +5,7 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.spaceshooter.SpaceShooterApp;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.scene.paint.Color;
@@ -18,11 +19,13 @@ public class BigInvader extends Invader{
     Sprite target;
     double momentum;
     
+    int xDir = 1;
+    
     public BigInvader(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed, Sprite target, double momentum) {
         super(x, y, width, height, type, color, speed, bulletSpeed);
-        setFiringCooldown(0.1);
-        setMovementCooldown(0.01);
-        setPauseCooldown(0.01);
+        setFiringCooldown(0.5);
+        setMovementCooldown(3);
+        setPauseCooldown(0.5);
         
         this.target = target;
         this.momentum = momentum;
@@ -30,7 +33,7 @@ public class BigInvader extends Invader{
 
     public ArrayList<Sprite> shoot() {
         int width = 60;
-        int height = 30;
+        int height = 20;
         ArrayList<Sprite> bullets = new ArrayList<>();
         bullets.add(new BigBullet(
                 (int) (getTranslateX() + getWidth()/2 - (double) width /2),
@@ -42,12 +45,64 @@ public class BigInvader extends Invader{
                 momentum
             )
         );
+        
+        bullets.add(new BigBullet(
+                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) getTranslateY(),
+                width, height,
+                getType() + "bullet", Color.BLACK,
+                getBulletSpeed(),
+                new Vector(-1, 0),
+                target,
+                momentum
+            )
+        );
+        bullets.add(new BigBullet(
+                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) getTranslateY(),
+                width, height,
+                getType() + "bullet", Color.BLACK,
+                getBulletSpeed(),
+                new Vector(1, 0),
+                target,
+                momentum
+            )
+        );
+        
+        bullets.add(new BigBullet(
+                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) getTranslateY(),
+                width, height,
+                getType() + "bullet", Color.BLACK,
+                getBulletSpeed(),
+                new Vector(-1, 1),
+                target,
+                momentum
+            )
+        );
+        bullets.add(new BigBullet(
+                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) getTranslateY(),
+                width, height,
+                getType() + "bullet", Color.BLACK,
+                getBulletSpeed(),
+                new Vector(1, 1),
+                target,
+                momentum
+            )
+        );
 
         return bullets;
     }
 
     public void updateMovement(){
-        setDirection(new Vector(0, 0));
+        if (getTranslateX() + getWidth() > SpaceShooterApp.screenWidth * 0.9
+                || getTranslateX() < SpaceShooterApp.screenWidth * 0.1
+        ){
+            xDir = -xDir;
+        }
+        setDirection(new Vector(xDir, 0));
+
     }
     
 }

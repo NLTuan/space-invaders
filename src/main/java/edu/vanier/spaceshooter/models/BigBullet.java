@@ -23,6 +23,14 @@ public class BigBullet extends Sprite{
         this.momentum = momentum;
     }
     
+    public BigBullet(int x, int y, int width, int height, String type, Color color, double speed, Vector direction,
+            Sprite target, double momentum) {
+        super(x, y, width, height, type, color, speed);
+        setDirection(direction);
+        this.target = target;
+        this.momentum = momentum;
+    }
+    
     public void updateDirection(){
         Vector position = new Vector(getTranslateX() + getWidth()/2, getTranslateY() + getHeight()/2);
         Vector targetPosition = new Vector(

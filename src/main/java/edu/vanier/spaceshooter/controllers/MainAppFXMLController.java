@@ -38,8 +38,9 @@ public class MainAppFXMLController {
     private ArrayList<KeyCode> input;
 
     private double playerSpeed = 300;
-    private double smallInvaderSpeed = 30;
+    private double smallInvaderSpeed = 50;
     private double mediumInvaderSpeed = 100;
+    private double bigInvaderSpeed = 20;
 
     private double playerBulletSpeed = 1000;
     private double enemyBulletSpeed = 300;
@@ -159,7 +160,7 @@ public class MainAppFXMLController {
                 SpaceShooterApp.screenWidth/2 - 35,
                 35, 70, 70, "enemy",
                 Color.ORANGE,
-                mediumInvaderSpeed,
+                bigInvaderSpeed,
                 enemyBulletSpeed,
                 spaceShip,
                 0.02
@@ -365,10 +366,10 @@ public class MainAppFXMLController {
     }
     
     private boolean outOfBounds(Sprite sprite){
-        double tolerance = 50;
+        double tolerance = 20;
         if ((sprite.getTranslateX() + sprite.getWidth() < -tolerance)
                 || (sprite.getTranslateX() > SpaceShooterApp.screenWidth + tolerance)
-                || (sprite.getTranslateY() + sprite.getWidth() < -tolerance)
+                || (sprite.getTranslateY() + sprite.getHeight()< -tolerance)
                 || (sprite.getTranslateY() > SpaceShooterApp.screenHeight + tolerance)
                 ){
             return true;
