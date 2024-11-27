@@ -13,8 +13,12 @@ import org.slf4j.LoggerFactory;
 public class SpaceShooterApp extends Application {
 
     private final static Logger logger = LoggerFactory.getLogger(SpaceShooterApp.class);
-    MainAppFXMLController controller;
 
+    public static int screenWidth = 1000;
+    public static int screenHeight = 700;
+
+    MainAppFXMLController controller;
+    
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -25,8 +29,9 @@ public class SpaceShooterApp extends Application {
             controller = new MainAppFXMLController();
             loader.setController(controller);
             Pane root = loader.load();
+            System.out.println(root.getPrefWidth());
             //-- 2) Create and set the scene to the stage.
-            Scene scene = new Scene(root, 1000, 1000);
+            Scene scene = new Scene(root, screenWidth, screenHeight);
             controller.setScene(scene);
             controller.setupGameWorld();
             primaryStage.setScene(scene);
@@ -51,5 +56,4 @@ public class SpaceShooterApp extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-
 }

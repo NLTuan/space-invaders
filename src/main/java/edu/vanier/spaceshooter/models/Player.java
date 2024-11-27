@@ -6,7 +6,7 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class Player extends FiringSprite{
-    private double stage = 2;
+    private int stage = 2;
 
     private double internalShootingClock;
     private double shootCooldown = 0.5;
@@ -23,53 +23,60 @@ public class Player extends FiringSprite{
         else {
             stage = 1;
         }
+        System.out.println(stage);
     }
 
     public ArrayList<Sprite> shoot(){
-        int width = 5;
-        int height = 20;
+        int width = 20;
+        int height = 5;
         ArrayList<Sprite> bullets = new ArrayList<>();
-        if (stage == 1){
-            bullets.add(new Sprite(
-                    (int) (getTranslateX() + getWidth()/2 - (double) width /2),
-                    (int) getTranslateY(),
-                    width, height,
-                    getType() + "bullet", Color.BLACK, getBulletSpeed(),
-                    new Vector(0, -1)
+        switch (stage) {
+            case 1 -> bullets.add(new Sprite(
+                        (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                        (int) getTranslateY(),
+                        width, height,
+                        getType() + "bullet", Color.BLACK, getBulletSpeed(),
+                        new Vector(0, -1)
                 )
-            );
-        }
-        else if (stage == 2){
-            bullets.add(new Sprite(
-                    (int) (getTranslateX() + getWidth()/3 - (double) width/2),
-                    (int) getTranslateY(),
-                    width, height,
-                    getType() + "bullet", Color.BLACK, getBulletSpeed(),
-                    new Vector(-0.25, -1)));
-
-            bullets.add(new Sprite(
-                    (int) (getTranslateX() + getWidth()* 2/3 - (double) width/2),
-                    (int) getTranslateY(),
-                    width, height,
-                    getType() + "bullet", Color.BLACK, getBulletSpeed(),
-                    new Vector(0, -1)));
-
-            bullets.add(new Sprite(
-                    (int) (getTranslateX() + getWidth()* 2/3 - (double) width/2),
-                    (int) getTranslateY(),
-                    width, height,
-                    getType() + "bullet", Color.BLACK, getBulletSpeed(),
-                    new Vector(0.25, -1)));
-
+                );
+            case 2 -> {
+                for (double i = -0.25; i < 0.26; i+=0.25) {
+                    bullets.add(new Sprite(
+                            (int) (getTranslateX() + getWidth()/3 - (double) width/2),
+                            (int) getTranslateY(),
+                            width, height,
+                            getType() + "bullet", Color.BLACK, getBulletSpeed(),
+                            new Vector(i, -1)));
+                }
+            }
+            case 3 -> {
+                for (double i = -1; i < 1.1; i+=0.5) {
+                    for (double j = -1; j < 1.1; j+=0.5) {
+                        if (i == 0 && j==0) {
+                            continue;
+                        }
+                        bullets.add(new Sprite(
+                                (int) (getTranslateX() + getWidth()/3 - (double) width/2),
+                                (int) getTranslateY(),
+                                width, height,
+                                getType() + "bullet", Color.BLACK, getBulletSpeed(),
+                                new Vector(i, j)));
+                    }
+                    
+                }
+            }
+            default -> {
+            }
         }
         return bullets;
     }
 
+    
     public double getStage() {
         return stage;
     }
 
-    public void setStage(double stage) {
+    public void setStage(int stage) {
         this.stage = stage;
     }
 

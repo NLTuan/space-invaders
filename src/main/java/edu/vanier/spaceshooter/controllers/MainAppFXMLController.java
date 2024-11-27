@@ -1,6 +1,7 @@
 package edu.vanier.spaceshooter.controllers;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.models.*;
 
 import java.util.ArrayList;
@@ -26,7 +27,7 @@ public class MainAppFXMLController {
     private final static Logger logger = LoggerFactory.getLogger(MainAppFXMLController.class);
     @FXML
     private Pane animationPanel;
-    private Sprite spaceShip;
+    private Player spaceShip;
     private Scene mainScene;
     AnimationTimer gameLoop;
     
@@ -45,6 +46,11 @@ public class MainAppFXMLController {
 
     private int windowWidth = 600;
     private int windowHeight = 800;
+    
+    private boolean weaponSwitchPressed = false;
+    
+    private int enemiesPerRow = 5;
+    private int numOfRows = 5;
 
     public int getWindowWidth() {
         return windowWidth;
@@ -65,8 +71,10 @@ public class MainAppFXMLController {
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
-        spaceShip = new Player(300, 750, 40, 40, "player", Color.BLUE, playerSpeed, playerBulletSpeed);
-        animationPanel.setPrefSize(600, 800);
+        spaceShip = new Player(
+                SpaceShooterApp.screenWidth/2, 
+                (int)(SpaceShooterApp.screenHeight * 0.75), 40, 40, "player", Color.BLUE, playerSpeed, playerBulletSpeed);
+        animationPanel.setPrefSize(SpaceShooterApp.screenWidth, SpaceShooterApp.screenWidth);
         animationPanel.getChildren().add(spaceShip);
         
         input = new ArrayList<>();
@@ -112,34 +120,52 @@ public class MainAppFXMLController {
         
         mainScene.setOnKeyReleased((KeyEvent e) -> {
             KeyCode code = e.getCode();
+            if (input.contains(code)){
+                weaponSwitchPressed = false;
+            }
+            
             input.remove(code);
-        });
-        
 
+        });
     }
 
     private void generateInvaders() {
-        for (int i = 0; i < 10; i++) {
-            Sprite invader = new SmallInvader(
-                    90 + i * 100,
-                    150, 30, 30, "enemy",
-                    Color.RED,
-                    smallInvaderSpeed,
-                    enemyBulletSpeed
-            );
-            animationPanel.getChildren().add(invader);
-        }
+        
+        int spacingX = SpaceShooterApp.screenWidth/enemiesPerRow;
+        int spacingY = (int)(SpaceShooterApp.screenHeight * 0.5 / numOfRows);
+        Vector topLeft = new Vector(spacingX, spacingY);
+//        for (int i = 0; i < enemiesPerRow - 1; i++) {
+//            Sprite invader = new SmallInvader(
+//                    (int)topLeft.getX() + i * spacingX,
+//                    (int)topLeft.getY(), 30, 30, "enemy",
+//                    Color.RED,
+//                    smallInvaderSpeed,
+//                    enemyBulletSpeed
+//            );
+//            animationPanel.getChildren().add(invader);
+//        }
 
-        for (int i = 0; i < 10; i++) {
-            Sprite invader = new MediumInvader(
-                    90 + i * 100,
-                    200, 30, 30, "enemy",
-                    Color.BLUE,
-                    mediumInvaderSpeed,
-                    enemyBulletSpeed
+//        for (int i = 0; i < enemiesPerRow; i++) {
+//            Sprite invader = new MediumInvader(
+//                    (int)topLeft.getX() + i * spacingX,
+//                    (int)topLeft.getY() + spacingY, 30, 30, "enemy",
+//                    Color.BLUE,
+//                    mediumInvaderSpeed,
+//                    enemyBulletSpeed
+//            );
+//            animationPanel.getChildren().add(invader);
+//        }
+        Sprite bigInvader = new BigInvader(
+                SpaceShooterApp.screenWidth/2 - 35,
+                35, 70, 70, "enemy",
+                Color.ORANGE,
+                mediumInvaderSpeed,
+                enemyBulletSpeed,
+                spaceShip,
+                0.02
             );
-            animationPanel.getChildren().add(invader);
-        }
+        animationPanel.getChildren().add(bigInvader);
+
     }
 
     /**
@@ -177,7 +203,10 @@ public class MainAppFXMLController {
         totalElapsedTime += elapsedTime;
         // Actions to be performed during each frame of the animation.
 
-
+        if(input.contains(KeyCode.E) && !weaponSwitchPressed){
+            spaceShip.updateStage();
+            weaponSwitchPressed = true;
+        }
         Vector direction = new Vector(
             boolToDouble(input.contains(KeyCode.D)) - boolToDouble(input.contains(KeyCode.A)),
             boolToDouble(input.contains(KeyCode.S)) - boolToDouble(input.contains(KeyCode.W))
@@ -207,6 +236,10 @@ public class MainAppFXMLController {
                 handleEnemyFiring(sprite);
                 break;
         }
+        
+        if (outOfBounds(sprite)){
+            sprite.setDead(true);
+        }
     }
 
     private void handlePlayer(Sprite sprite){
@@ -215,6 +248,10 @@ public class MainAppFXMLController {
         sprite.move(elapsedTime);
     }
     private void handleEnemyBullet(Sprite sprite) {
+        if(sprite instanceof BigBullet){
+            ((BigBullet)sprite).updateDirection();
+        }
+        
         sprite.move(elapsedTime);
         // Check for collision with the spaceship
         if (sprite.getBoundsInParent().intersects(spaceShip.getBoundsInParent())) {
@@ -258,14 +295,17 @@ public class MainAppFXMLController {
     private void handleEnemy(Sprite sprite) {
         sprite.move(elapsedTime);
         Invader invader = (Invader) sprite;
-        if (totalElapsedTime % (invader.getMovementCooldown() + invader.getPauseCooldown()) < invader.getMovementCooldown()
+        if ((totalElapsedTime + invader.getDeltaClock()) 
+                % (invader.getMovementCooldown() + invader.getPauseCooldown())
+                < invader.getMovementCooldown()
                 && !invader.isMovementUpdated()
         ) {
             invader.updateMovement();
             invader.setMovementUpdated(true);
             invader.setPauseUpdated(false);
         }
-        else if (totalElapsedTime % (invader.getMovementCooldown() + invader.getPauseCooldown())
+        else if ((totalElapsedTime + invader.getDeltaClock()) 
+                % (invader.getMovementCooldown() + invader.getPauseCooldown())
                 > invader.getMovementCooldown()
             && !invader.isPauseUpdated()
         ){
@@ -304,15 +344,6 @@ public class MainAppFXMLController {
      */
     private void shoot(FiringSprite firingEntity) {
         // The firing entity can be either an enemy or the spaceship.
-
-        int width = 5;
-        int height = 20;
-
-        new Sprite(
-                (int) (firingEntity.getTranslateX() + firingEntity.getWidth()/2 - (double) width /2),
-                (int) firingEntity.getTranslateY(),
-                width, height,
-                firingEntity.getType() + "bullet", Color.BLACK, firingEntity.getBulletSpeed());
         ArrayList<Sprite> bullets = firingEntity.shoot();
         for (Sprite bullet: bullets){
             animationPanel.getChildren().add(bullet);
@@ -329,7 +360,28 @@ public class MainAppFXMLController {
         }
     }
     
-    private double boolToDouble(boolean bool){
+    public static double boolToDouble(boolean bool){
         return (bool)? 1.0: 0;
+    }
+    
+    private boolean outOfBounds(Sprite sprite){
+        double tolerance = 50;
+        if ((sprite.getTranslateX() + sprite.getWidth() < -tolerance)
+                || (sprite.getTranslateX() > SpaceShooterApp.screenWidth + tolerance)
+                || (sprite.getTranslateY() + sprite.getWidth() < -tolerance)
+                || (sprite.getTranslateY() > SpaceShooterApp.screenHeight + tolerance)
+                ){
+            return true;
+        }
+        return false;
+
+    }
+
+    public Player getSpaceShip() {
+        return spaceShip;
+    }
+
+    public void setSpaceShip(Player spaceShip) {
+        this.spaceShip = spaceShip;
     }
 }

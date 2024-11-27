@@ -5,6 +5,7 @@ import javafx.scene.paint.Color;
 
 public abstract class Invader extends FiringSprite {
 
+    private double deltaClock; // This value offsets the inner clock of each invader so that their movements are unsynced 
     private double movementCooldown = 1; // When this timer hits, the invader changes its movement
     private boolean movementUpdated = false; // When this is true, the movement just got updated
     private double pauseCooldown = 0.01; // When this timer hits, the invader remains stationary
@@ -46,5 +47,13 @@ public abstract class Invader extends FiringSprite {
 
     public void setPauseUpdated(boolean pauseUpdated) {
         this.pauseUpdated = pauseUpdated;
+    }
+
+    public double getDeltaClock() {
+        return deltaClock;
+    }
+
+    public void setDeltaClock(double deltaClock) {
+        this.deltaClock = deltaClock;
     }
 }

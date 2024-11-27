@@ -34,7 +34,6 @@ public class Vector {
             return this;
         }
         double norm = Math.sqrt(x * x + y * y);
-        System.out.println(norm);
         return scalarMultiply(1/norm);
     }
     
@@ -53,6 +52,10 @@ public class Vector {
     public void setY(double y) {
         this.y = y;
     }
-    
+
+    @Override
+    public String toString() {
+        return "Vector{" + "x=" + x + ", y=" + y + '}';
+    }
     
 }
