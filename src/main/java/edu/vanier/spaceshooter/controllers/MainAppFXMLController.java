@@ -37,7 +37,7 @@ public class MainAppFXMLController {
     
     private ArrayList<KeyCode> input;
 
-    private double playerSpeed = 300;
+    private double playerSpeed = 400;
     private double smallInvaderSpeed = 50;
     private double mediumInvaderSpeed = 100;
     private double bigInvaderSpeed = 20;
@@ -74,7 +74,7 @@ public class MainAppFXMLController {
         logger.info("Initializing MainAppController...");
         spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
-                (int)(SpaceShooterApp.screenHeight * 0.75), 40, 40, "player", Color.BLUE, playerSpeed, playerBulletSpeed);
+                (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", Color.BLUE, playerSpeed, playerBulletSpeed);
         animationPanel.setPrefSize(SpaceShooterApp.screenWidth, SpaceShooterApp.screenWidth);
         animationPanel.getChildren().add(spaceShip);
         
@@ -135,27 +135,27 @@ public class MainAppFXMLController {
         int spacingX = SpaceShooterApp.screenWidth/enemiesPerRow;
         int spacingY = (int)(SpaceShooterApp.screenHeight * 0.5 / numOfRows);
         Vector topLeft = new Vector(spacingX, spacingY);
-//        for (int i = 0; i < enemiesPerRow - 1; i++) {
-//            Sprite invader = new SmallInvader(
-//                    (int)topLeft.getX() + i * spacingX,
-//                    (int)topLeft.getY(), 30, 30, "enemy",
-//                    Color.RED,
-//                    smallInvaderSpeed,
-//                    enemyBulletSpeed
-//            );
-//            animationPanel.getChildren().add(invader);
-//        }
+        for (int i = 0; i < enemiesPerRow - 1; i++) {
+            Sprite invader = new SmallInvader(
+                    (int)topLeft.getX() + i * spacingX,
+                    (int)topLeft.getY(), 30, 30, "enemy",
+                    Color.RED,
+                    smallInvaderSpeed,
+                    enemyBulletSpeed
+            );
+            animationPanel.getChildren().add(invader);
+        }
 
-//        for (int i = 0; i < enemiesPerRow; i++) {
-//            Sprite invader = new MediumInvader(
-//                    (int)topLeft.getX() + i * spacingX,
-//                    (int)topLeft.getY() + spacingY, 30, 30, "enemy",
-//                    Color.BLUE,
-//                    mediumInvaderSpeed,
-//                    enemyBulletSpeed
-//            );
-//            animationPanel.getChildren().add(invader);
-//        }
+        for (int i = 0; i < enemiesPerRow; i++) {
+            Sprite invader = new MediumInvader(
+                    (int)topLeft.getX() + i * spacingX,
+                    (int)topLeft.getY() + spacingY, 30, 30, "enemy",
+                    Color.BLUE,
+                    mediumInvaderSpeed,
+                    enemyBulletSpeed
+            );
+            animationPanel.getChildren().add(invader);
+        }
         Sprite bigInvader = new BigInvader(
                 SpaceShooterApp.screenWidth/2 - 35,
                 35, 70, 70, "enemy",
@@ -163,7 +163,7 @@ public class MainAppFXMLController {
                 bigInvaderSpeed,
                 enemyBulletSpeed,
                 spaceShip,
-                0.02
+                0.011
             );
         animationPanel.getChildren().add(bigInvader);
 

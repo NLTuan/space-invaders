@@ -14,24 +14,73 @@ public class MediumInvader extends Invader {
 
     public MediumInvader(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed) {
         super(x, y, width, height, type, color, speed, bulletSpeed);
-        setFiringCooldown(0.5);
+        setFiringCooldown(1);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);
     }
 
     public ArrayList<Sprite> shoot() {
         int width = 10;
-        int height = 10;
+        int height = 5;
         ArrayList<Sprite> bullets = new ArrayList<>();
-        bullets.add(new Sprite(
+        
+        Random random = new Random();
+        int cond = random.nextInt(3);
+        switch (cond) {
+            case 0:
+                for(int i = -1; i < 2; i+=2){
+                    bullets.add(new Sprite(
+                    (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                    (int) getTranslateY(),
+                    width, height,
+                    getType() + "bullet", Color.BLACK,
+                    getBulletSpeed(),
+                    new Vector(i, 0)
+                    ));
+                    
+                    bullets.add(new Sprite(
+                    (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                    (int) getTranslateY(),
+                    width, height,
+                    getType() + "bullet", Color.BLACK,
+                    getBulletSpeed(),
+                    new Vector(0, i)
+                    ));
+                }
+                break;
+
+            case 1:
+                for(int i = -1; i < 2; i+=2){
+                    for (int j = -1; j < 2; j+=2) {
+                        bullets.add(new Sprite(
                         (int) (getTranslateX() + getWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
                         getType() + "bullet", Color.BLACK,
                         getBulletSpeed(),
-                        new Vector(0, movingUp ? -1 : 1)
-                )
-        );
+                        new Vector(i, j)
+                        ));
+                    }
+                }
+                break;
+                
+            default:
+                for(int i = -1; i < 2; i++){
+                    for (int j = -1; j < 2; j++) {
+                        if (i == 0 && j == 0){
+                            continue;
+                        }
+                        bullets.add(new Sprite(
+                        (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                        (int) getTranslateY(),
+                        width, height,
+                        getType() + "bullet", Color.BLACK,
+                        getBulletSpeed(),
+                        new Vector(i, j)
+                        ));
+                    }
+                }
+        }
 
         return bullets;
     }

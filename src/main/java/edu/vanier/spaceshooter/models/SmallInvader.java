@@ -1,6 +1,7 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.spaceshooter.SpaceShooterApp;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -35,6 +36,16 @@ public class SmallInvader extends Invader{
 
     public void updateMovement(){
         Random random = new Random();
-        setDirection(new Vector(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1));
+        Vector direction = new Vector(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
+        if((getTranslateX() < SpaceShooterApp.screenWidth * 0.3 && direction.getX() < 0)
+            || (getTranslateX() + getWidth() > SpaceShooterApp.screenWidth * 0.3 && direction.getX() > 0)){
+            direction.setX(-direction.getX());
+        }
+        else if((getTranslateY() < SpaceShooterApp.screenHeight * 0.3 && direction.getY() < 0)
+            || (getTranslateY() + getHeight() > SpaceShooterApp.screenHeight * 0.7 && direction.getY() > 0)){
+            direction.setY(-direction.getY());
+        }
+        setDirection(direction);
     }
+    
 }

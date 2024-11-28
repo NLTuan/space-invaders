@@ -49,23 +49,23 @@ public class BigInvader extends Invader{
         bullets.add(new BigBullet(
                 (int) (getTranslateX() + getWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
-                width, height,
+                width / 2, height / 2,
                 getType() + "bullet", Color.BLACK,
                 getBulletSpeed(),
                 new Vector(-1, 0),
                 target,
-                momentum
+                momentum * 1.7
             )
         );
         bullets.add(new BigBullet(
                 (int) (getTranslateX() + getWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
-                width, height,
+                width / 2, height / 2,
                 getType() + "bullet", Color.BLACK,
                 getBulletSpeed(),
                 new Vector(1, 0),
                 target,
-                momentum
+                momentum * 1.7
             )
         );
         
