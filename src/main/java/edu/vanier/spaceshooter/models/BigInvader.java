@@ -19,10 +19,11 @@ public class BigInvader extends Invader{
     Sprite target;
     double momentum;
     
+    private String laserString = "/PNG/laserRed12.png";
     int xDir = 1;
     
-    public BigInvader(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed, Sprite target, double momentum) {
-        super(x, y, width, height, type, color, speed, bulletSpeed);
+    public BigInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed, Sprite target, double momentum) {
+        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
         setFiringCooldown(0.5);
         setMovementCooldown(3);
         setPauseCooldown(0.5);
@@ -36,10 +37,10 @@ public class BigInvader extends Invader{
         int height = 20;
         ArrayList<Sprite> bullets = new ArrayList<>();
         bullets.add(new BigBullet(
-                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", Color.BLACK,
+                getType() + "bullet", laserString,
                 getBulletSpeed(),
                 target,
                 momentum
@@ -47,10 +48,10 @@ public class BigInvader extends Invader{
         );
         
         bullets.add(new BigBullet(
-                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width / 2, height / 2,
-                getType() + "bullet", Color.BLACK,
+                getType() + "bullet", laserString,
                 getBulletSpeed(),
                 new Vector(-1, 0),
                 target,
@@ -58,10 +59,10 @@ public class BigInvader extends Invader{
             )
         );
         bullets.add(new BigBullet(
-                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width / 2, height / 2,
-                getType() + "bullet", Color.BLACK,
+                getType() + "bullet", laserString,
                 getBulletSpeed(),
                 new Vector(1, 0),
                 target,
@@ -70,10 +71,10 @@ public class BigInvader extends Invader{
         );
         
         bullets.add(new BigBullet(
-                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", Color.BLACK,
+                getType() + "bullet", laserString,
                 getBulletSpeed(),
                 new Vector(-1, 1),
                 target,
@@ -81,10 +82,10 @@ public class BigInvader extends Invader{
             )
         );
         bullets.add(new BigBullet(
-                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", Color.BLACK,
+                getType() + "bullet", laserString,
                 getBulletSpeed(),
                 new Vector(1, 1),
                 target,
@@ -96,7 +97,7 @@ public class BigInvader extends Invader{
     }
 
     public void updateMovement(){
-        if (getTranslateX() + getWidth() > SpaceShooterApp.screenWidth * 0.9
+        if (getTranslateX() + getFitWidth() > SpaceShooterApp.screenWidth * 0.9
                 || getTranslateX() < SpaceShooterApp.screenWidth * 0.1
         ){
             xDir = -xDir;

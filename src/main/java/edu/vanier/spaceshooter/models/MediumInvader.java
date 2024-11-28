@@ -11,9 +11,11 @@ import java.util.Random;
 public class MediumInvader extends Invader {
     
     private boolean movingUp = false;
+    
+    private String laserString = "/PNG/Lasers/laserBlue";
 
-    public MediumInvader(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, color, speed, bulletSpeed);
+    public MediumInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
         setFiringCooldown(1);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);
@@ -30,19 +32,19 @@ public class MediumInvader extends Invader {
             case 0:
                 for(int i = -1; i < 2; i+=2){
                     bullets.add(new Sprite(
-                    (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                    (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                     (int) getTranslateY(),
                     width, height,
-                    getType() + "bullet", Color.BLACK,
+                    getType() + "bullet", laserString,
                     getBulletSpeed(),
                     new Vector(i, 0)
                     ));
                     
                     bullets.add(new Sprite(
-                    (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                    (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                     (int) getTranslateY(),
                     width, height,
-                    getType() + "bullet", Color.BLACK,
+                    getType() + "bullet", laserString,
                     getBulletSpeed(),
                     new Vector(0, i)
                     ));
@@ -53,10 +55,10 @@ public class MediumInvader extends Invader {
                 for(int i = -1; i < 2; i+=2){
                     for (int j = -1; j < 2; j+=2) {
                         bullets.add(new Sprite(
-                        (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                        (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        getType() + "bullet", Color.BLACK,
+                        getType() + "bullet", laserString,
                         getBulletSpeed(),
                         new Vector(i, j)
                         ));
@@ -71,10 +73,10 @@ public class MediumInvader extends Invader {
                             continue;
                         }
                         bullets.add(new Sprite(
-                        (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                        (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        getType() + "bullet", Color.BLACK,
+                        getType() + "bullet", laserString,
                         getBulletSpeed(),
                         new Vector(i, j)
                         ));
@@ -86,7 +88,7 @@ public class MediumInvader extends Invader {
     }
 
     public void updateMovement(){
-        if (getTranslateY() + getHeight() > SpaceShooterApp.screenHeight * 0.8){
+        if (getTranslateY() + getFitHeight() > SpaceShooterApp.screenHeight * 0.8){
             movingUp = true;
         }
         else if (getTranslateY() < SpaceShooterApp.screenHeight * 0.2){
@@ -98,7 +100,7 @@ public class MediumInvader extends Invader {
         switch (cond){
             case 0 -> {
                 x = 1;
-                if (getTranslateX()+ getWidth() > SpaceShooterApp.screenWidth * 0.8){
+                if (getTranslateX()+ getFitWidth() > SpaceShooterApp.screenWidth * 0.8){
                     x = -1;
                 }
             }

@@ -16,26 +16,26 @@ public class BigBullet extends Sprite{
 
     Sprite target;
     double momentum;
-    public BigBullet(int x, int y, int width, int height, String type, Color color, double speed, Sprite target, double momentum) {
-        super(x, y, width, height, type, color, speed);
+    public BigBullet(int x, int y, int width, int height, String type, String imagePath, double speed, Sprite target, double momentum) {
+        super(x, y, width, height, type, imagePath, speed);
         setDirection(new Vector(0, 1));
         this.target = target;
         this.momentum = momentum;
     }
     
-    public BigBullet(int x, int y, int width, int height, String type, Color color, double speed, Vector direction,
+    public BigBullet(int x, int y, int width, int height, String type, String imagePath, double speed, Vector direction,
             Sprite target, double momentum) {
-        super(x, y, width, height, type, color, speed);
+        super(x, y, width, height, type, imagePath, speed);
         setDirection(direction);
         this.target = target;
         this.momentum = momentum;
     }
     
     public void updateDirection(){
-        Vector position = new Vector(getTranslateX() + getWidth()/2, getTranslateY() + getHeight()/2);
+        Vector position = new Vector(getTranslateX() + getFitWidth()/2, getTranslateY() + getFitHeight()/2);
         Vector targetPosition = new Vector(
-                target.getTranslateX() + target.getWidth()/2,
-                target.getTranslateY() + target.getHeight()/2
+                target.getTranslateX() + target.getFitWidth()/2,
+                target.getTranslateY() + target.getFitHeight()/2
         );
         Vector newDirection = targetPosition.add(position.negative()).normalized();
         System.out.println(getDirection().scalarMultiply(1 - momentum).toString());

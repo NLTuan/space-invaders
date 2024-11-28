@@ -9,8 +9,8 @@ public abstract class FiringSprite extends Sprite{
 
     private double firingCooldown;
 
-    public FiringSprite(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, color, speed);
+    public FiringSprite(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, type, imagePath, speed);
         this.bulletSpeed = bulletSpeed;
     }
 

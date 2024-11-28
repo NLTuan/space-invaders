@@ -8,8 +8,10 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class SmallInvader extends Invader{
-    public SmallInvader(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, color, speed, bulletSpeed);
+    private String laserString = "/PNG/laserBlue01.png";
+    
+    public SmallInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
         setFiringCooldown(2);
         setMovementCooldown(2);
         setPauseCooldown(0.8);
@@ -22,10 +24,10 @@ public class SmallInvader extends Invader{
         int height = 2;
         ArrayList<Sprite> bullets = new ArrayList<>();
         bullets.add(new Sprite(
-                (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", Color.BLACK,
+                getType() + "bullet", laserString,
                 getBulletSpeed(),
                 new Vector(0, 1)
             )
@@ -38,11 +40,11 @@ public class SmallInvader extends Invader{
         Random random = new Random();
         Vector direction = new Vector(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);
         if((getTranslateX() < SpaceShooterApp.screenWidth * 0.3 && direction.getX() < 0)
-            || (getTranslateX() + getWidth() > SpaceShooterApp.screenWidth * 0.3 && direction.getX() > 0)){
+            || (getTranslateX() + getFitWidth() > SpaceShooterApp.screenWidth * 0.3 && direction.getX() > 0)){
             direction.setX(-direction.getX());
         }
         else if((getTranslateY() < SpaceShooterApp.screenHeight * 0.3 && direction.getY() < 0)
-            || (getTranslateY() + getHeight() > SpaceShooterApp.screenHeight * 0.7 && direction.getY() > 0)){
+            || (getTranslateY() + getFitHeight() > SpaceShooterApp.screenHeight * 0.7 && direction.getY() > 0)){
             direction.setY(-direction.getY());
         }
         setDirection(direction);

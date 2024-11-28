@@ -1,11 +1,14 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-public class Sprite extends Rectangle {
+public class Sprite extends ImageView {
 
+    
     private boolean dead = false;
     private final String type;
     
@@ -14,9 +17,11 @@ public class Sprite extends Rectangle {
     private Vector direction;
 
     private double internalClock;
-    public Sprite(int x, int y, int width, int height, String type, Color color, double speed) {
-        super(width, height, color);
-
+    public Sprite(int x, int y, int width, int height, String type, String imagePath, double speed) {
+        super();
+        setImage(new Image(getClass().getResource(imagePath).toExternalForm()));
+        setFitWidth(width);
+        setFitHeight(height);
         this.type = type;
         setTranslateX(x);
         setTranslateY(y);
@@ -25,9 +30,11 @@ public class Sprite extends Rectangle {
         direction = new Vector(0, 0);
     }
 
-    public Sprite(int x, int y, int width, int height, String type, Color color, double speed, Vector direction) {
-        super(width, height, color);
-
+    public Sprite(int x, int y, int width, int height, String imagePath, String type,double speed, Vector direction) {
+        super();
+        setImage(new Image(getClass().getResource(imagePath).toExternalForm()));
+        setFitWidth(width);
+        setFitHeight(height);
         this.type = type;
         setTranslateX(x);
         setTranslateY(y);
@@ -82,4 +89,6 @@ public class Sprite extends Rectangle {
     public void setSpeed(double speed) {
         this.speed = speed;
     }
+    
+    
 }

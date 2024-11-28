@@ -11,8 +11,8 @@ public abstract class Invader extends FiringSprite {
     private double pauseCooldown = 0.01; // When this timer hits, the invader remains stationary
     private boolean pauseUpdated = true; // When this is true, the invader just got updated to pause
 
-    public Invader(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, color, speed, bulletSpeed);
+    public Invader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
     }
 
     public abstract void updateMovement();

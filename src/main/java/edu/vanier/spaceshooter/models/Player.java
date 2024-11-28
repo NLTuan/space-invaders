@@ -10,9 +10,12 @@ public class Player extends FiringSprite{
 
     private double internalShootingClock;
     private double shootCooldown = 0.5;
+    
+    private String laserString = "/PNG/laserBlue01.png";
 
-    public Player(int x, int y, int width, int height, String type, Color color, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, color, speed, bulletSpeed);
+
+    public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
         setFiringCooldown(0.1);
     }
 
@@ -32,20 +35,20 @@ public class Player extends FiringSprite{
         ArrayList<Sprite> bullets = new ArrayList<>();
         switch (stage) {
             case 1 -> bullets.add(new Sprite(
-                        (int) (getTranslateX() + getWidth()/2 - (double) width /2),
+                        (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        getType() + "bullet", Color.BLACK, getBulletSpeed(),
+                        getType() + "bullet", laserString, getBulletSpeed(),
                         new Vector(0, -1)
                 )
                 );
             case 2 -> {
                 for (double i = -0.25; i < 0.26; i+=0.25) {
                     bullets.add(new Sprite(
-                            (int) (getTranslateX() + getWidth()/3 - (double) width/2),
+                            (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
                             (int) getTranslateY(),
                             width, height,
-                            getType() + "bullet", Color.BLACK, getBulletSpeed(),
+                            getType() + "bullet", laserString, getBulletSpeed(),
                             new Vector(i, -1)));
                 }
             }
@@ -56,10 +59,10 @@ public class Player extends FiringSprite{
                             continue;
                         }
                         bullets.add(new Sprite(
-                                (int) (getTranslateX() + getWidth()/3 - (double) width/2),
+                                (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
                                 (int) getTranslateY(),
                                 width, height,
-                                getType() + "bullet", Color.BLACK, getBulletSpeed(),
+                                getType() + "bullet", laserString, getBulletSpeed(),
                                 new Vector(i, j)));
                     }
                     

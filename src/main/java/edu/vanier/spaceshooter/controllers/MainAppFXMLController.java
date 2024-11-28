@@ -52,6 +52,8 @@ public class MainAppFXMLController {
     
     private int enemiesPerRow = 5;
     private int numOfRows = 5;
+    
+    private String playerString = "/PNG/playerShip1_blue.png";
 
     public int getWindowWidth() {
         return windowWidth;
@@ -74,7 +76,7 @@ public class MainAppFXMLController {
         logger.info("Initializing MainAppController...");
         spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
-                (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", Color.BLUE, playerSpeed, playerBulletSpeed);
+                (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", playerString, playerSpeed, playerBulletSpeed);
         animationPanel.setPrefSize(SpaceShooterApp.screenWidth, SpaceShooterApp.screenWidth);
         animationPanel.getChildren().add(spaceShip);
         
@@ -139,7 +141,7 @@ public class MainAppFXMLController {
             Sprite invader = new SmallInvader(
                     (int)topLeft.getX() + i * spacingX,
                     (int)topLeft.getY(), 30, 30, "enemy",
-                    Color.RED,
+                    "/PNG/enemyBlack1.png",
                     smallInvaderSpeed,
                     enemyBulletSpeed
             );
@@ -150,7 +152,7 @@ public class MainAppFXMLController {
             Sprite invader = new MediumInvader(
                     (int)topLeft.getX() + i * spacingX,
                     (int)topLeft.getY() + spacingY, 30, 30, "enemy",
-                    Color.BLUE,
+                    "/PNG/enemyBlack2.png",
                     mediumInvaderSpeed,
                     enemyBulletSpeed
             );
@@ -159,7 +161,7 @@ public class MainAppFXMLController {
         Sprite bigInvader = new BigInvader(
                 SpaceShooterApp.screenWidth/2 - 35,
                 35, 70, 70, "enemy",
-                Color.ORANGE,
+                "/PNG/enemyBlack2.png",
                 bigInvaderSpeed,
                 enemyBulletSpeed,
                 spaceShip,
@@ -367,9 +369,9 @@ public class MainAppFXMLController {
     
     private boolean outOfBounds(Sprite sprite){
         double tolerance = 20;
-        if ((sprite.getTranslateX() + sprite.getWidth() < -tolerance)
+        if ((sprite.getTranslateX() + sprite.getFitWidth() < -tolerance)
                 || (sprite.getTranslateX() > SpaceShooterApp.screenWidth + tolerance)
-                || (sprite.getTranslateY() + sprite.getHeight()< -tolerance)
+                || (sprite.getTranslateY() + sprite.getFitHeight()< -tolerance)
                 || (sprite.getTranslateY() > SpaceShooterApp.screenHeight + tolerance)
                 ){
             return true;
