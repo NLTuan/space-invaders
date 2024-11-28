@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class SmallInvader extends Invader{
-    private String laserString = "/PNG/laserBlue01.png";
+    private String laserString = "/PNG/Lasers/laserBlue01.png";
     
     public SmallInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -27,7 +27,8 @@ public class SmallInvader extends Invader{
                 (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", laserString,
+                laserString,
+                getType() + "bullet",
                 getBulletSpeed(),
                 new Vector(0, 1)
             )

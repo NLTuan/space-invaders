@@ -141,7 +141,7 @@ public class MainAppFXMLController {
             Sprite invader = new SmallInvader(
                     (int)topLeft.getX() + i * spacingX,
                     (int)topLeft.getY(), 30, 30, "enemy",
-                    "/PNG/enemyBlack1.png",
+                    "/PNG/Enemies/enemyBlack1.png",
                     smallInvaderSpeed,
                     enemyBulletSpeed
             );
@@ -152,7 +152,7 @@ public class MainAppFXMLController {
             Sprite invader = new MediumInvader(
                     (int)topLeft.getX() + i * spacingX,
                     (int)topLeft.getY() + spacingY, 30, 30, "enemy",
-                    "/PNG/enemyBlack2.png",
+                    "/PNG/Enemies/enemyBlack2.png",
                     mediumInvaderSpeed,
                     enemyBulletSpeed
             );
@@ -161,7 +161,7 @@ public class MainAppFXMLController {
         Sprite bigInvader = new BigInvader(
                 SpaceShooterApp.screenWidth/2 - 35,
                 35, 70, 70, "enemy",
-                "/PNG/enemyBlack2.png",
+                "/PNG/Enemies/enemyBlack2.png",
                 bigInvaderSpeed,
                 enemyBulletSpeed,
                 spaceShip,

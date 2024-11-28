@@ -30,7 +30,7 @@ public class Sprite extends ImageView {
         direction = new Vector(0, 0);
     }
 
-    public Sprite(int x, int y, int width, int height, String imagePath, String type,double speed, Vector direction) {
+    public Sprite(int x, int y, int width, int height, String imagePath, String type ,double speed, Vector direction) {
         super();
         setImage(new Image(getClass().getResource(imagePath).toExternalForm()));
         setFitWidth(width);
@@ -49,15 +49,24 @@ public class Sprite extends ImageView {
         Vector finalPos = position.add(move);
         setTranslateX(finalPos.getX());
         setTranslateY(finalPos.getY());
-        if (direction.getX() != 0){
-            setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
-        }
-        else if (direction.getX() == 0 && direction.getY() != 0){
-            setRotate(direction.getY() * 90);
-        }
-        else{
-            setRotate(0);
-        }
+        if(getType().contains("bullet"))
+            if (direction.getX() != 0){
+                if (direction.getX() < 0){
+                    setRotate((Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI));
+                }
+                else{
+                    setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
+                }
+            }
+            else if (direction.getX() != 0){
+                setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
+            }
+            else if (direction.getX() == 0 && direction.getY() != 0){
+                setRotate(direction.getY() * 90);
+            }
+            else{
+                setRotate(0);
+            }
     }
     
     

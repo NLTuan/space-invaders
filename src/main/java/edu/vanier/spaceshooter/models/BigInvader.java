@@ -19,7 +19,7 @@ public class BigInvader extends Invader{
     Sprite target;
     double momentum;
     
-    private String laserString = "/PNG/laserRed12.png";
+    private String laserString = "/PNG/Lasers/laserRed01.png";
     int xDir = 1;
     
     public BigInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed, Sprite target, double momentum) {

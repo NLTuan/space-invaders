@@ -11,8 +11,7 @@ public class Player extends FiringSprite{
     private double internalShootingClock;
     private double shootCooldown = 0.5;
     
-    private String laserString = "/PNG/laserBlue01.png";
-
+    private String laserString = "/PNG/Lasers/laserBlue01.png";
 
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -30,15 +29,16 @@ public class Player extends FiringSprite{
     }
 
     public ArrayList<Sprite> shoot(){
-        int width = 20;
-        int height = 5;
+        int width = 200;
+        int height = 50;
         ArrayList<Sprite> bullets = new ArrayList<>();
         switch (stage) {
             case 1 -> bullets.add(new Sprite(
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        getType() + "bullet", laserString, getBulletSpeed(),
+                        laserString,
+                        getType() + "bullet", getBulletSpeed() * 0.01,
                         new Vector(0, -1)
                 )
                 );
@@ -48,7 +48,8 @@ public class Player extends FiringSprite{
                             (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
                             (int) getTranslateY(),
                             width, height,
-                            getType() + "bullet", laserString, getBulletSpeed(),
+                            laserString,
+                            getType() + "bullet", getBulletSpeed(),
                             new Vector(i, -1)));
                 }
             }
@@ -62,13 +63,12 @@ public class Player extends FiringSprite{
                                 (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
                                 (int) getTranslateY(),
                                 width, height,
-                                getType() + "bullet", laserString, getBulletSpeed(),
+                                laserString,
+                                getType() + "bullet", getBulletSpeed(),
                                 new Vector(i, j)));
                     }
                     
                 }
-            }
-            default -> {
             }
         }
         return bullets;

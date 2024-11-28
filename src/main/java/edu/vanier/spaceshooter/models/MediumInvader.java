@@ -12,7 +12,7 @@ public class MediumInvader extends Invader {
     
     private boolean movingUp = false;
     
-    private String laserString = "/PNG/Lasers/laserBlue";
+    private String laserString = "/PNG/Lasers/laserGreen02.png";
 
     public MediumInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -22,8 +22,8 @@ public class MediumInvader extends Invader {
     }
 
     public ArrayList<Sprite> shoot() {
-        int width = 10;
-        int height = 5;
+        int width = 100;
+        int height = 25;
         ArrayList<Sprite> bullets = new ArrayList<>();
         
         Random random = new Random();
@@ -35,7 +35,8 @@ public class MediumInvader extends Invader {
                     (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                     (int) getTranslateY(),
                     width, height,
-                    getType() + "bullet", laserString,
+                    laserString,
+                getType() + "bullet",
                     getBulletSpeed(),
                     new Vector(i, 0)
                     ));
@@ -44,7 +45,8 @@ public class MediumInvader extends Invader {
                     (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                     (int) getTranslateY(),
                     width, height,
-                    getType() + "bullet", laserString,
+                    laserString,
+                getType() + "bullet",
                     getBulletSpeed(),
                     new Vector(0, i)
                     ));
@@ -58,7 +60,8 @@ public class MediumInvader extends Invader {
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        getType() + "bullet", laserString,
+                        laserString,
+                        getType() + "bullet",
                         getBulletSpeed(),
                         new Vector(i, j)
                         ));
@@ -76,8 +79,9 @@ public class MediumInvader extends Invader {
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        getType() + "bullet", laserString,
-                        getBulletSpeed(),
+                        laserString,
+                        getType() + "bullet",
+                        getBulletSpeed() * 0.01,
                         new Vector(i, j)
                         ));
                     }
