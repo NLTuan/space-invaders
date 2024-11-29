@@ -1,6 +1,7 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ public class Player extends FiringSprite{
     private double internalShootingClock;
     private double shootCooldown = 0.5;
     
-    private String laserString = "/PNG/Lasers/laserBlue01.png";
+    private String laserString = MainAppFXMLController.getSpriteMap().get("playerLaser");
 
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -37,8 +38,9 @@ public class Player extends FiringSprite{
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
+                        getType() + "bullet", 
                         laserString,
-                        getType() + "bullet", getBulletSpeed() * 0.01,
+                        getBulletSpeed() * 0.01,
                         new Vector(0, -1)
                 )
                 );
@@ -48,8 +50,9 @@ public class Player extends FiringSprite{
                             (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
                             (int) getTranslateY(),
                             width, height,
+                            getType() + "bullet",
                             laserString,
-                            getType() + "bullet", getBulletSpeed(),
+                            getBulletSpeed(),
                             new Vector(i, -1)));
                 }
             }

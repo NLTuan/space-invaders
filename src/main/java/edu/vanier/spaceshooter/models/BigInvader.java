@@ -6,6 +6,7 @@ package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
 import edu.vanier.spaceshooter.SpaceShooterApp;
+import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import java.util.ArrayList;
 import java.util.Random;
 import javafx.scene.paint.Color;
@@ -19,7 +20,7 @@ public class BigInvader extends Invader{
     Sprite target;
     double momentum;
     
-    private String laserString = "/PNG/Lasers/laserRed01.png";
+    private String laserString = MainAppFXMLController.getSpriteMap().get("bulletBig");
     int xDir = 1;
     
     public BigInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed, Sprite target, double momentum) {
@@ -33,14 +34,15 @@ public class BigInvader extends Invader{
     }
 
     public ArrayList<Sprite> shoot() {
-        int width = 60;
+        int width = 80;
         int height = 20;
         ArrayList<Sprite> bullets = new ArrayList<>();
         bullets.add(new BigBullet(
                 (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", laserString,
+                getType() + "bullet", 
+                laserString,
                 getBulletSpeed(),
                 target,
                 momentum
@@ -51,7 +53,8 @@ public class BigInvader extends Invader{
                 (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width / 2, height / 2,
-                getType() + "bullet", laserString,
+                getType() + "bullet", 
+                laserString,
                 getBulletSpeed(),
                 new Vector(-1, 0),
                 target,
@@ -62,7 +65,8 @@ public class BigInvader extends Invader{
                 (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width / 2, height / 2,
-                getType() + "bullet", laserString,
+                getType() + "bullet", 
+                laserString,
                 getBulletSpeed(),
                 new Vector(1, 0),
                 target,
@@ -74,7 +78,8 @@ public class BigInvader extends Invader{
                 (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", laserString,
+                getType() + "bullet", 
+                laserString,
                 getBulletSpeed(),
                 new Vector(-1, 1),
                 target,
@@ -85,7 +90,8 @@ public class BigInvader extends Invader{
                 (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                 (int) getTranslateY(),
                 width, height,
-                getType() + "bullet", laserString,
+                getType() + "bullet", 
+                laserString,
                 getBulletSpeed(),
                 new Vector(1, 1),
                 target,

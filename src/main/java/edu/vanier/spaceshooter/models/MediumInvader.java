@@ -12,11 +12,11 @@ public class MediumInvader extends Invader {
     
     private boolean movingUp = false;
     
-    private String laserString = "/PNG/Lasers/laserGreen02.png";
+    private String laserString = MainAppFXMLController.getSpriteMap().get("bulletMedium");
 
     public MediumInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(1);
+        setFiringCooldown(2);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);
     }
@@ -35,8 +35,8 @@ public class MediumInvader extends Invader {
                     (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                     (int) getTranslateY(),
                     width, height,
+                    getType() + "bullet",
                     laserString,
-                getType() + "bullet",
                     getBulletSpeed(),
                     new Vector(i, 0)
                     ));
@@ -45,8 +45,8 @@ public class MediumInvader extends Invader {
                     (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                     (int) getTranslateY(),
                     width, height,
+                    getType() + "bullet",
                     laserString,
-                getType() + "bullet",
                     getBulletSpeed(),
                     new Vector(0, i)
                     ));
@@ -60,8 +60,8 @@ public class MediumInvader extends Invader {
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        laserString,
                         getType() + "bullet",
+                        laserString,
                         getBulletSpeed(),
                         new Vector(i, j)
                         ));
@@ -79,9 +79,9 @@ public class MediumInvader extends Invader {
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
                         width, height,
-                        laserString,
                         getType() + "bullet",
-                        getBulletSpeed() * 0.01,
+                        laserString,
+                        getBulletSpeed(),
                         new Vector(i, j)
                         ));
                     }

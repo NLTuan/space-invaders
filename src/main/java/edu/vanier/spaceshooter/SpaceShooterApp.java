@@ -15,7 +15,7 @@ public class SpaceShooterApp extends Application {
     private final static Logger logger = LoggerFactory.getLogger(SpaceShooterApp.class);
 
     public static int screenWidth = 1000;
-    public static int screenHeight = 700;
+    public static int screenHeight = 600;
 
     MainAppFXMLController controller;
     

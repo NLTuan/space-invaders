@@ -5,6 +5,7 @@ import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.models.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -53,7 +54,7 @@ public class MainAppFXMLController {
     private int enemiesPerRow = 5;
     private int numOfRows = 5;
     
-    private String playerString = "/PNG/playerShip1_blue.png";
+    private static HashMap<String, String> spriteMap = new HashMap<String, String>();
 
     public int getWindowWidth() {
         return windowWidth;
@@ -71,15 +72,26 @@ public class MainAppFXMLController {
         this.windowHeight = windowHeight;
     }
 
+    static {
+        spriteMap.put("playerShip", "playerShip.png");
+        spriteMap.put("playerLaser", "playerLaser.png");
+        spriteMap.put("bulletSmall", "bulletSmall.png");
+        spriteMap.put("bulletMedium", "bulletMedium.png");
+        spriteMap.put("bulletBig", "bulletBig.png");
+        spriteMap.put("smallInvader", "smallInvader.png");
+        spriteMap.put("mediumInvader", "mediumInvader.png");
+        spriteMap.put("bigInvader", "bigInvader.png");
+    }
+    
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
         spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
-                (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", playerString, playerSpeed, playerBulletSpeed);
+                (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", spriteMap.get("playerShip"), playerSpeed, playerBulletSpeed);
         animationPanel.setPrefSize(SpaceShooterApp.screenWidth, SpaceShooterApp.screenWidth);
         animationPanel.getChildren().add(spaceShip);
-        
+        animationPanel.setStyle(" -fx-background-color: black;");
         input = new ArrayList<>();
     }
 
@@ -141,7 +153,7 @@ public class MainAppFXMLController {
             Sprite invader = new SmallInvader(
                     (int)topLeft.getX() + i * spacingX,
                     (int)topLeft.getY(), 30, 30, "enemy",
-                    "/PNG/Enemies/enemyBlack1.png",
+                    spriteMap.get("smallInvader"),
                     smallInvaderSpeed,
                     enemyBulletSpeed
             );
@@ -151,8 +163,8 @@ public class MainAppFXMLController {
         for (int i = 0; i < enemiesPerRow; i++) {
             Sprite invader = new MediumInvader(
                     (int)topLeft.getX() + i * spacingX,
-                    (int)topLeft.getY() + spacingY, 30, 30, "enemy",
-                    "/PNG/Enemies/enemyBlack2.png",
+                    (int)topLeft.getY() + spacingY, 50, 50, "enemy",
+                    spriteMap.get("mediumInvader"),
                     mediumInvaderSpeed,
                     enemyBulletSpeed
             );
@@ -161,7 +173,7 @@ public class MainAppFXMLController {
         Sprite bigInvader = new BigInvader(
                 SpaceShooterApp.screenWidth/2 - 35,
                 35, 70, 70, "enemy",
-                "/PNG/Enemies/enemyBlack2.png",
+                spriteMap.get("bigInvader"),
                 bigInvaderSpeed,
                 enemyBulletSpeed,
                 spaceShip,
@@ -243,6 +255,14 @@ public class MainAppFXMLController {
         if (outOfBounds(sprite)){
             sprite.setDead(true);
         }
+    }
+
+    public static HashMap<String, String> getSpriteMap() {
+        return spriteMap;
+    }
+
+    public static void setSpriteMap(HashMap<String, String> spriteMap) {
+        MainAppFXMLController.spriteMap = spriteMap;
     }
 
     private void handlePlayer(Sprite sprite){

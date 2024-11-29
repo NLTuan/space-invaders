@@ -38,7 +38,6 @@ public class BigBullet extends Sprite{
                 target.getTranslateY() + target.getFitHeight()/2
         );
         Vector newDirection = targetPosition.add(position.negative()).normalized();
-        System.out.println(getDirection().scalarMultiply(1 - momentum).toString());
         Vector finalDirection = ((getDirection().scalarMultiply(1 - momentum)).add(newDirection.scalarMultiply(momentum))).normalized();
         setDirection(finalDirection);
         

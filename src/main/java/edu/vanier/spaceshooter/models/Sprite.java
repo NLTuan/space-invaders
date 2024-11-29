@@ -1,6 +1,7 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.spaceshooter.SpaceShooterApp;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
@@ -8,7 +9,6 @@ import javafx.scene.shape.Rectangle;
 
 public class Sprite extends ImageView {
 
-    
     private boolean dead = false;
     private final String type;
     
@@ -16,10 +16,9 @@ public class Sprite extends ImageView {
     
     private Vector direction;
 
-    private double internalClock;
     public Sprite(int x, int y, int width, int height, String type, String imagePath, double speed) {
         super();
-        setImage(new Image(getClass().getResource(imagePath).toExternalForm()));
+        setImage(new Image(getClass().getResource("/sprite_images/" + imagePath).toExternalForm()));
         setFitWidth(width);
         setFitHeight(height);
         this.type = type;
@@ -30,9 +29,9 @@ public class Sprite extends ImageView {
         direction = new Vector(0, 0);
     }
 
-    public Sprite(int x, int y, int width, int height, String imagePath, String type ,double speed, Vector direction) {
+    public Sprite(int x, int y, int width, int height, String type, String imagePath ,double speed, Vector direction) {
         super();
-        setImage(new Image(getClass().getResource(imagePath).toExternalForm()));
+        setImage(new Image(getClass().getResource("/sprite_images/" + imagePath).toExternalForm()));
         setFitWidth(width);
         setFitHeight(height);
         this.type = type;
@@ -47,12 +46,32 @@ public class Sprite extends ImageView {
         Vector move = direction.scalarMultiply(speed).scalarMultiply(elapsedTime);
         Vector position = new Vector(getTranslateX(), getTranslateY());
         Vector finalPos = position.add(move);
-        setTranslateX(finalPos.getX());
-        setTranslateY(finalPos.getY());
+        
+        // Handle player from going out of bounds
+        if(this instanceof Player){
+            if ((finalPos.getX() < 0 || finalPos.getX() + getFitWidth() > SpaceShooterApp.screenWidth)
+                    && (finalPos.getY() < 0 || finalPos.getY() + getFitHeight()> SpaceShooterApp.screenHeight)){}
+            else if (finalPos.getX() < 0 || finalPos.getX() + getFitWidth() > SpaceShooterApp.screenWidth){
+                setTranslateY(finalPos.getY());
+            }
+            else if (finalPos.getY() < 0 || finalPos.getY() + getFitHeight()> SpaceShooterApp.screenHeight){
+                setTranslateX(finalPos.getX());
+            }
+            else{
+                setTranslateX(finalPos.getX());
+                setTranslateY(finalPos.getY());
+            }
+        }
+        else{
+            setTranslateX(finalPos.getX());
+            setTranslateY(finalPos.getY());
+        }
+        
+        // Handle bullet rotation
         if(getType().contains("bullet"))
             if (direction.getX() != 0){
                 if (direction.getX() < 0){
-                    setRotate((Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI));
+                    setRotate(180 + (Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI));
                 }
                 else{
                     setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
