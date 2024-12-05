@@ -19,6 +19,8 @@ public class SpaceShooterApp extends Application {
 
     MainAppFXMLController controller;
     
+    Scene mainScene;
+    
     @Override
     public void start(Stage primaryStage) {
         try {
@@ -31,10 +33,10 @@ public class SpaceShooterApp extends Application {
             Pane root = loader.load();
             System.out.println(root.getPrefWidth());
             //-- 2) Create and set the scene to the stage.
-            Scene scene = new Scene(root, screenWidth, screenHeight);
-            controller.setScene(scene);
+            mainScene = new Scene(root, screenWidth, screenHeight);
+            controller.setScene(mainScene);
             controller.setupGameWorld();
-            primaryStage.setScene(scene);
+            primaryStage.setScene(mainScene);
             primaryStage.setTitle("Space Invaders!");
             primaryStage.sizeToScene();
             primaryStage.setAlwaysOnTop(true);
@@ -47,6 +49,14 @@ public class SpaceShooterApp extends Application {
         }
     }
 
+    public Scene getMainScene() {
+        return mainScene;
+    }
+
+    public void setMainScene(Scene mainScene) {
+        this.mainScene = mainScene;
+    }
+    
     @Override
     public void stop() throws Exception {
         // Stop the animation timer upon closing the main stage.

@@ -15,7 +15,7 @@ public class Player extends FiringSprite{
 
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(0.5);
+        setFiringCooldown(0.1);
     }
 
     public void updateStage(){

@@ -48,11 +48,9 @@ public class MainAppFXMLController {
     private double enemyBulletSpeed = 300;
 
     private int windowWidth = 600;
-    private int windowHeight = 800;
+    private int windowHeight = 900;
     
     private boolean weaponSwitchPressed = false;
-    
-
     
     private GameManager gameManager;
     
@@ -84,6 +82,9 @@ public class MainAppFXMLController {
         spriteMap.put("mediumInvader", "mediumInvader.png");
         spriteMap.put("bigInvader", "bigInvader.png");
     }
+
+    
+    
     
     @FXML
     public void initialize() {
@@ -101,7 +102,7 @@ public class MainAppFXMLController {
     public void setupGameWorld() {
         initGameLoop();
         setupKeyPressHandlers();
-        generateInvaders();
+//        generateInvaders();
     }
 
     private void initGameLoop() {
@@ -141,15 +142,14 @@ public class MainAppFXMLController {
             if (input.contains(code)){
                 weaponSwitchPressed = false;
             }
-            
             input.remove(code);
 
         });
     }
 
-    private void generateInvaders() {
-        gameManager.spawnInvaders();
-    }
+//    private void generateInvaders() {
+//        gameManager.spawnInvaders();
+//    }
 
     /**
      * Retrieves a list of all sprites currently in the animation panel.
@@ -200,6 +200,22 @@ public class MainAppFXMLController {
         getSprites().forEach(this::processSprite);
         removeDeadSprites();
         lastNanoTime = System.nanoTime();
+        
+        SpaceShooterApp.screenWidth = (int)animationPanel.getWidth();
+        SpaceShooterApp.screenHeight = (int)animationPanel.getHeight();
+        
+        boolean levelUp = true;
+        for (Node sprite: animationPanel.getChildren()){
+            if(sprite instanceof Invader){
+                levelUp = false;
+                break;
+            }
+        }
+        if(levelUp){
+            gameManager.levelUp();
+            gameManager.spawnInvaders();
+        }
+        
     }
 
     private void processSprite(Sprite sprite) {
@@ -358,9 +374,9 @@ public class MainAppFXMLController {
     private boolean outOfBounds(Sprite sprite){
         double tolerance = 20;
         if ((sprite.getTranslateX() + sprite.getFitWidth() < -tolerance)
-                || (sprite.getTranslateX() > SpaceShooterApp.screenWidth + tolerance)
+                || (sprite.getTranslateX() > mainScene.getWidth() + tolerance)
                 || (sprite.getTranslateY() + sprite.getFitHeight()< -tolerance)
-                || (sprite.getTranslateY() > SpaceShooterApp.screenHeight + tolerance)
+                || (sprite.getTranslateY() > mainScene.getHeight() + tolerance)
                 ){
             return true;
         }
@@ -422,6 +438,14 @@ public class MainAppFXMLController {
 
     public void setSmallInvaderSpeed(double smallInvaderSpeed) {
         this.smallInvaderSpeed = smallInvaderSpeed;
+    }
+
+    public Scene getMainScene() {
+        return mainScene;
+    }
+
+    public void setMainScene(Scene mainScene) {
+        this.mainScene = mainScene;
     }
     
     

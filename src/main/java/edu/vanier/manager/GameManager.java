@@ -25,27 +25,91 @@ public class GameManager {
     
 
     public GameManager(MainAppFXMLController controller, Pane animPane) {
-        level = 1;
+        level = 0;
         this.controller = controller;
         this.animPane = animPane;
     }
     
     public void spawnInvaders(){
-        int enemiesPerRow = 5;
-        int numOfRows = 5;
-        int spacingX = SpaceShooterApp.screenWidth/enemiesPerRow;
-        int spacingY = (int)(SpaceShooterApp.screenHeight * 0.5 / numOfRows);
-        Vector topLeft = new Vector(spacingX/2, spacingY/2);
-        for (int i = 0; i < enemiesPerRow; i++) {
-            Sprite invader = new SmallInvader(
-                    (int)topLeft.getX() + i * spacingX,
-                    (int)topLeft.getY(), 30, 30, "enemy",
-                    MainAppFXMLController.getSpriteMap().get("smallInvader"),
-                    controller.getSmallInvaderSpeed(),
-                    controller.getEnemyBulletSpeed()
-            );
-            animPane.getChildren().add(invader);
+        int enemiesPerRow;
+        int numOfRows;
+        switch (level){
+            case 1 -> {
+                enemiesPerRow = 5;
+                numOfRows = 3;
+                int spacingX = (int)animPane.getWidth()/enemiesPerRow;
+                int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
+                Vector topLeft = new Vector(spacingX/2, spacingY/2);
+                for(int j = 0; j < numOfRows; j++){
+                    for (int i = 0; i < enemiesPerRow; i++) {
+                        Sprite invader = new SmallInvader(
+                                (int)topLeft.getX() + i * spacingX,
+                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                MainAppFXMLController.getSpriteMap().get("smallInvader"),
+                                controller.getSmallInvaderSpeed(),
+                                controller.getEnemyBulletSpeed()
+                        );
+                        animPane.getChildren().add(invader);
+                    }
+                }
+            }
+            case 2 -> {
+                enemiesPerRow = 7;
+                numOfRows = 3;
+                int spacingX = (int)animPane.getWidth()/enemiesPerRow;
+                int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
+                Vector topLeft = new Vector(spacingX/2, spacingY/2);
+                for(int j = 0; j < numOfRows; j++){
+                    for (int i = 0; i < enemiesPerRow; i++) {
+                        Sprite invader;
+                        if(j % 2 == 0){
+                            invader = new SmallInvader(
+                                (int)topLeft.getX() + i * spacingX,
+                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                MainAppFXMLController.getSpriteMap().get("smallInvader"),
+                                controller.getSmallInvaderSpeed(),
+                                controller.getEnemyBulletSpeed()
+                            );
+                        }
+                        else{
+                            invader = new MediumInvader(
+                                (int)topLeft.getX() + i * spacingX,
+                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                MainAppFXMLController.getSpriteMap().get("mediumInvader"),
+                                controller.getMediumInvaderSpeed(),
+                                controller.getEnemyBulletSpeed()
+                            );
+                        }
+
+                        animPane.getChildren().add(invader);
+                    }
+                }
+               
+            }
+            default -> {
+                enemiesPerRow = 11;
+                numOfRows = 3;
+                int spacingX = (int)animPane.getWidth()/enemiesPerRow;
+                int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
+                Vector topLeft = new Vector(spacingX/2, spacingY/2);
+                for(int j = 0; j < numOfRows; j++){
+                    for (int i = 0; i < enemiesPerRow; i++) {
+                        Sprite invader = new BigInvader(
+                            (int)topLeft.getX() + i * spacingX,
+                            (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                            MainAppFXMLController.getSpriteMap().get("bigInvader"),
+                            controller.getMediumInvaderSpeed(),
+                            controller.getEnemyBulletSpeed(),
+                            controller.getSpaceShip(),
+                            0.01
+                        );
+                        animPane.getChildren().add(invader);
+                    }
+                }
+            }
+
         }
+
 
 //        for (int i = 0; i < enemiesPerRow; i++) {
 //            Sprite invader = new MediumInvader(
@@ -68,4 +132,17 @@ public class GameManager {
 //            );
 //        animationPanel.getChildren().add(bigInvader);
     }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+    
+    public void levelUp(){
+        level++;
+    }    
+    
 }
