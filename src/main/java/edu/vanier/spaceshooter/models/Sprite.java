@@ -27,6 +27,7 @@ public class Sprite extends ImageView {
         
         this.speed = speed;
         direction = new Vector(0, 0);
+        rotateBullet();
     }
 
     public Sprite(int x, int y, int width, int height, String type, String imagePath ,double speed, Vector direction) {
@@ -40,6 +41,7 @@ public class Sprite extends ImageView {
 
         this.speed = speed;
         this.direction = direction.normalized();
+        rotateBullet();
     }
 
     public void move(double elapsedTime){
@@ -67,26 +69,7 @@ public class Sprite extends ImageView {
             setTranslateY(finalPos.getY());
         }
         
-                // Handle bullet rotation
-        if(getType().contains("bullet")){
-            if (direction.getX() != 0){
-                if (direction.getX() < 0){
-                    setRotate(180 + (Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI));
-                }
-                else{
-                    setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
-                }
-            }
-            else if (direction.getX() != 0){
-                setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
-            }
-            else if (direction.getX() == 0 && direction.getY() != 0){
-                setRotate(direction.getY() * 90);
-            }
-            else{
-                setRotate(0);
-            }
-        }
+        rotateBullet();
     }
     
     private void rotateBullet(){

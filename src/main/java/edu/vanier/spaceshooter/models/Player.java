@@ -7,8 +7,8 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class Player extends FiringSprite{
-    private int stage = 0;
-    private int maxStage = 1;
+    private int stage = 1;
+    private int maxStage = 0;
 
     private double internalShootingClock;
     
