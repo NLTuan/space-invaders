@@ -67,8 +67,8 @@ public class Sprite extends ImageView {
             setTranslateY(finalPos.getY());
         }
         
-        // Handle bullet rotation
-        if(getType().contains("bullet"))
+                // Handle bullet rotation
+        if(getType().contains("bullet")){
             if (direction.getX() != 0){
                 if (direction.getX() < 0){
                     setRotate(180 + (Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI));
@@ -86,8 +86,32 @@ public class Sprite extends ImageView {
             else{
                 setRotate(0);
             }
+        }
     }
     
+    private void rotateBullet(){
+        // Handle bullet rotation
+        if(getType().contains("bullet")){
+            if (direction.getX() != 0){
+                if (direction.getX() < 0){
+                    setRotate(180 + (Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI));
+                }
+                else{
+                    setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
+                }
+            }
+            else if (direction.getX() != 0){
+                setRotate(Math.atan(direction.getY()/direction.getX()) * 180 / Math.PI);
+            }
+            else if (direction.getX() == 0 && direction.getY() != 0){
+                setRotate(direction.getY() * 90);
+            }
+            else{
+                setRotate(0);
+            }
+        }
+    }
+
     
 
     public boolean isDead() {

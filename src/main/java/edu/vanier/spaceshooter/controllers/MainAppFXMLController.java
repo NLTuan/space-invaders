@@ -214,6 +214,7 @@ public class MainAppFXMLController {
         if(levelUp){
             gameManager.levelUp();
             gameManager.spawnInvaders();
+            spaceShip.levelUp();
         }
         
     }

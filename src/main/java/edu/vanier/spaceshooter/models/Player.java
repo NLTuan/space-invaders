@@ -7,7 +7,8 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class Player extends FiringSprite{
-    private int stage = 2;
+    private int stage = 0;
+    private int maxStage = 1;
 
     private double internalShootingClock;
     
@@ -19,7 +20,7 @@ public class Player extends FiringSprite{
     }
 
     public void updateStage(){
-        if(stage != 3){
+        if(stage != maxStage){
             stage += 1;
         }
         else {
@@ -77,6 +78,12 @@ public class Player extends FiringSprite{
         return bullets;
     }
 
+    public void levelUp(){
+        if(maxStage < 3){
+            maxStage += 1;
+
+        }
+    }
     
     public double getStage() {
         return stage;
@@ -93,4 +100,14 @@ public class Player extends FiringSprite{
     public void setInternalShootingClock(double internalShootingClock) {
         this.internalShootingClock = internalShootingClock;
     }
+
+    public int getMaxStage() {
+        return maxStage;
+    }
+
+    public void setMaxStage(int maxStage) {
+        this.maxStage = maxStage;
+    }
+    
+    
 }
