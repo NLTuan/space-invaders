@@ -1,6 +1,7 @@
 package edu.vanier.spaceshooter.controllers;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.manager.GameManager;
 import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.models.*;
 
@@ -51,8 +52,9 @@ public class MainAppFXMLController {
     
     private boolean weaponSwitchPressed = false;
     
-    private int enemiesPerRow = 5;
-    private int numOfRows = 5;
+
+    
+    private GameManager gameManager;
     
     private static HashMap<String, String> spriteMap = new HashMap<String, String>();
 
@@ -93,6 +95,7 @@ public class MainAppFXMLController {
         animationPanel.getChildren().add(spaceShip);
         animationPanel.setStyle(" -fx-background-color: black;");
         input = new ArrayList<>();
+        gameManager = new GameManager(this, animationPanel);
     }
 
     public void setupGameWorld() {
@@ -145,42 +148,7 @@ public class MainAppFXMLController {
     }
 
     private void generateInvaders() {
-        
-        int spacingX = SpaceShooterApp.screenWidth/enemiesPerRow;
-        int spacingY = (int)(SpaceShooterApp.screenHeight * 0.5 / numOfRows);
-        Vector topLeft = new Vector(spacingX, spacingY);
-        for (int i = 0; i < enemiesPerRow - 1; i++) {
-            Sprite invader = new SmallInvader(
-                    (int)topLeft.getX() + i * spacingX,
-                    (int)topLeft.getY(), 30, 30, "enemy",
-                    spriteMap.get("smallInvader"),
-                    smallInvaderSpeed,
-                    enemyBulletSpeed
-            );
-            animationPanel.getChildren().add(invader);
-        }
-
-        for (int i = 0; i < enemiesPerRow; i++) {
-            Sprite invader = new MediumInvader(
-                    (int)topLeft.getX() + i * spacingX,
-                    (int)topLeft.getY() + spacingY, 50, 50, "enemy",
-                    spriteMap.get("mediumInvader"),
-                    mediumInvaderSpeed,
-                    enemyBulletSpeed
-            );
-            animationPanel.getChildren().add(invader);
-        }
-        Sprite bigInvader = new BigInvader(
-                SpaceShooterApp.screenWidth/2 - 35,
-                35, 70, 70, "enemy",
-                spriteMap.get("bigInvader"),
-                bigInvaderSpeed,
-                enemyBulletSpeed,
-                spaceShip,
-                0.011
-            );
-        animationPanel.getChildren().add(bigInvader);
-
+        gameManager.spawnInvaders();
     }
 
     /**
@@ -407,4 +375,54 @@ public class MainAppFXMLController {
     public void setSpaceShip(Player spaceShip) {
         this.spaceShip = spaceShip;
     }
+
+    public double getPlayerSpeed() {
+        return playerSpeed;
+    }
+
+    public void setPlayerSpeed(double playerSpeed) {
+        this.playerSpeed = playerSpeed;
+    }
+
+    public double getMediumInvaderSpeed() {
+        return mediumInvaderSpeed;
+    }
+
+    public void setMediumInvaderSpeed(double mediumInvaderSpeed) {
+        this.mediumInvaderSpeed = mediumInvaderSpeed;
+    }
+
+    public double getBigInvaderSpeed() {
+        return bigInvaderSpeed;
+    }
+
+    public void setBigInvaderSpeed(double bigInvaderSpeed) {
+        this.bigInvaderSpeed = bigInvaderSpeed;
+    }
+
+    public double getPlayerBulletSpeed() {
+        return playerBulletSpeed;
+    }
+
+    public void setPlayerBulletSpeed(double playerBulletSpeed) {
+        this.playerBulletSpeed = playerBulletSpeed;
+    }
+
+    public double getEnemyBulletSpeed() {
+        return enemyBulletSpeed;
+    }
+
+    public void setEnemyBulletSpeed(double enemyBulletSpeed) {
+        this.enemyBulletSpeed = enemyBulletSpeed;
+    }
+
+    public double getSmallInvaderSpeed() {
+        return smallInvaderSpeed;
+    }
+
+    public void setSmallInvaderSpeed(double smallInvaderSpeed) {
+        this.smallInvaderSpeed = smallInvaderSpeed;
+    }
+    
+    
 }

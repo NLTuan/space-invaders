@@ -10,13 +10,12 @@ public class Player extends FiringSprite{
     private int stage = 2;
 
     private double internalShootingClock;
-    private double shootCooldown = 0.5;
     
     private String laserString = MainAppFXMLController.getSpriteMap().get("playerLaser");
 
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(0.1);
+        setFiringCooldown(0.5);
     }
 
     public void updateStage(){
@@ -30,8 +29,8 @@ public class Player extends FiringSprite{
     }
 
     public ArrayList<Sprite> shoot(){
-        int width = 200;
-        int height = 50;
+        int width = 50;
+        int height = 10;
         ArrayList<Sprite> bullets = new ArrayList<>();
         switch (stage) {
             case 1 -> bullets.add(new Sprite(
@@ -40,7 +39,7 @@ public class Player extends FiringSprite{
                         width, height,
                         getType() + "bullet", 
                         laserString,
-                        getBulletSpeed() * 0.01,
+                        getBulletSpeed(),
                         new Vector(0, -1)
                 )
                 );
@@ -57,8 +56,8 @@ public class Player extends FiringSprite{
                 }
             }
             case 3 -> {
-                for (double i = -1; i < 1.1; i+=0.5) {
-                    for (double j = -1; j < 1.1; j+=0.5) {
+                for (double i = -1; i < 1.1; i+=0.50) {
+                    for (double j = -1; j < 1.1; j+=0.50) {
                         if (i == 0 && j==0) {
                             continue;
                         }
@@ -66,8 +65,9 @@ public class Player extends FiringSprite{
                                 (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
                                 (int) getTranslateY(),
                                 width, height,
+                                getType() + "bullet", 
                                 laserString,
-                                getType() + "bullet", getBulletSpeed(),
+                                getBulletSpeed(),
                                 new Vector(i, j)));
                     }
                     
@@ -92,13 +92,5 @@ public class Player extends FiringSprite{
 
     public void setInternalShootingClock(double internalShootingClock) {
         this.internalShootingClock = internalShootingClock;
-    }
-
-    public double getShootCooldown() {
-        return shootCooldown;
-    }
-
-    public void setShootCooldown(double shootCooldown) {
-        this.shootCooldown = shootCooldown;
     }
 }
