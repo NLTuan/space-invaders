@@ -16,9 +16,11 @@ public class MediumInvader extends Invader {
 
     public MediumInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(2);
+        setFiringCooldown(4);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);
+        setHitpoints(4);
+        setHpMax(4);
     }
 
     public ArrayList<Sprite> shoot() {
@@ -27,33 +29,32 @@ public class MediumInvader extends Invader {
         ArrayList<Sprite> bullets = new ArrayList<>();
         
         Random random = new Random();
-        int cond = random.nextInt(3);
-        switch (cond) {
-            case 0:
-                for(int i = -1; i < 2; i+=2){
-                    bullets.add(new Sprite(
-                    (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
-                    (int) getTranslateY(),
-                    width, height,
-                    getType() + "bullet",
-                    laserString,
-                    getBulletSpeed(),
-                    new Vector(i, 0)
-                    ));
-                    
-                    bullets.add(new Sprite(
-                    (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
-                    (int) getTranslateY(),
-                    width, height,
-                    getType() + "bullet",
-                    laserString,
-                    getBulletSpeed(),
-                    new Vector(0, i)
-                    ));
-                }
-                break;
+        int cond = random.nextInt(6) - 3;
+        if (cond < 0) {
+            for(int i = -1; i < 2; i+=2){
+                bullets.add(new Sprite(
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
+                (int) getTranslateY(),
+                width, height,
+                getType() + "bullet",
+                laserString,
+                getBulletSpeed(),
+                new Vector(i, 0)
+                ));
 
-            case 1:
+                bullets.add(new Sprite(
+                (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
+                (int) getTranslateY(),
+                width, height,
+                getType() + "bullet",
+                laserString,
+                getBulletSpeed(),
+                new Vector(0, i)
+                ));
+            }
+        }
+
+        else if (cond > 0){
                 for(int i = -1; i < 2; i+=2){
                     for (int j = -1; j < 2; j+=2) {
                         bullets.add(new Sprite(
@@ -67,29 +68,30 @@ public class MediumInvader extends Invader {
                         ));
                     }
                 }
-                break;
+        }
                 
-            default:
-                for(int i = -1; i < 2; i++){
-                    for (int j = -1; j < 2; j++) {
-                        if (i == 0 && j == 0){
-                            continue;
-                        }
-                        bullets.add(new Sprite(
-                        (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
-                        (int) getTranslateY(),
-                        width, height,
-                        getType() + "bullet",
-                        laserString,
-                        getBulletSpeed(),
-                        new Vector(i, j)
-                        ));
+        else if(cond == 0){
+            for(int i = -1; i < 2; i++){
+                for (int j = -1; j < 2; j++) {
+                    if (i == 0 && j == 0){
+                        continue;
                     }
+                    bullets.add(new Sprite(
+                    (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
+                    (int) getTranslateY(),
+                    width, height,
+                    getType() + "bullet",
+                    laserString,
+                    getBulletSpeed(),
+                    new Vector(i, j)
+                    ));
                 }
+            }
+        }
+        return bullets;
+
         }
 
-        return bullets;
-    }
 
     public void updateMovement(){
         if (getTranslateY() + getFitHeight() > SpaceShooterApp.screenHeight * 0.8){

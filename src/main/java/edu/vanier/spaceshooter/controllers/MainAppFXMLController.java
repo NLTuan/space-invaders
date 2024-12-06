@@ -14,10 +14,12 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,6 +91,8 @@ public class MainAppFXMLController {
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
+        ImageView bgImg = new ImageView("/sprite_images/Starset.png");
+        animationPanel.getChildren().add(bgImg);
         spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
                 (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", spriteMap.get("playerShip"), playerSpeed, playerBulletSpeed);
@@ -102,7 +106,6 @@ public class MainAppFXMLController {
     public void setupGameWorld() {
         initGameLoop();
         setupKeyPressHandlers();
-//        generateInvaders();
     }
 
     private void initGameLoop() {
@@ -271,11 +274,20 @@ public class MainAppFXMLController {
     private void handlePlayerBullet(Sprite sprite) {
         sprite.move(elapsedTime);
         for (Sprite enemy : getSprites()) {
-            if (enemy.getType().equals("enemy")) {
+            if (enemy instanceof Invader) {
                 // Check for collision with an enemy
                 if (sprite.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
-                    enemy.setDead(true);
-                    sprite.setDead(true);
+                    ((Invader) enemy).setHitpoints(((Invader) enemy).getHitpoints() - 1);
+
+                    if (((Invader) enemy).getHitpoints() == 0){
+                        enemy.setDead(true);
+                        ((Invader) enemy).getHpBar().setDead(true);
+                        sprite.setDead(true);
+                    }
+                    else{
+                        sprite.setDead(true);
+                    }
+
                 }
             }
         }
@@ -303,6 +315,7 @@ public class MainAppFXMLController {
     private void handleEnemy(Sprite sprite) {
         sprite.move(elapsedTime);
         Invader invader = (Invader) sprite;
+        invader.updateHP();
         if ((totalElapsedTime + invader.getDeltaClock()) 
                 % (invader.getMovementCooldown() + invader.getPauseCooldown())
                 < invader.getMovementCooldown()
@@ -333,8 +346,15 @@ public class MainAppFXMLController {
      */
     private void removeDeadSprites() {
         animationPanel.getChildren().removeIf(n -> {
-            Sprite sprite = (Sprite) n;
-            return sprite.isDead();
+            if (n instanceof Sprite) {
+                Sprite sprite = (Sprite) n;
+                return sprite.isDead();
+            }
+            else if (n instanceof HpBar){
+                HpBar hpBar = (HpBar) n;
+                return hpBar.isDead();
+            }
+            return false;
         });
     }
 

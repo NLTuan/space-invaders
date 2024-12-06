@@ -31,6 +31,9 @@ public class BigInvader extends Invader{
         
         this.target = target;
         this.momentum = momentum;
+        
+        setHitpoints(50);
+        setHpMax(50);
     }
 
     public ArrayList<Sprite> shoot() {

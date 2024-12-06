@@ -2,6 +2,7 @@ package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Rectangle;
 
 public abstract class Invader extends FiringSprite {
 
@@ -11,12 +12,23 @@ public abstract class Invader extends FiringSprite {
     private double pauseCooldown = 0.01; // When this timer hits, the invader remains stationary
     private boolean pauseUpdated = true; // When this is true, the invader just got updated to pause
 
+    private int hitpoints;
+    private int hpMax;
+    
+    private HpBar hpBar;
+    
     public Invader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
+        hpBar = new HpBar(this);
+        
     }
 
     public abstract void updateMovement();
 
+    public void updateHP(){
+        hpBar.updateBar();
+    }
+    
     public double getMovementCooldown() {
         return movementCooldown;
     }
@@ -56,4 +68,30 @@ public abstract class Invader extends FiringSprite {
     public void setDeltaClock(double deltaClock) {
         this.deltaClock = deltaClock;
     }
+
+    public int getHitpoints() {
+        return hitpoints;
+    }
+
+    public void setHitpoints(int hitpoints) {
+        this.hitpoints = hitpoints;
+    }
+
+    public int getHpMax() {
+        return hpMax;
+    }
+
+    public void setHpMax(int hpMax) {
+        this.hpMax = hpMax;
+    }
+
+    public HpBar getHpBar() {
+        return hpBar;
+    }
+
+    public void setHpBar(HpBar hpBar) {
+        this.hpBar = hpBar;
+    }
+    
+    
 }

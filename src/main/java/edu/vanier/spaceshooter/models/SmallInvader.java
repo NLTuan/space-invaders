@@ -13,9 +13,11 @@ public class SmallInvader extends Invader{
     
     public SmallInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(1);
+        setFiringCooldown(5);
         setMovementCooldown(2);
         setPauseCooldown(0.8);
+        setHitpoints(2);
+        setHpMax(2);
         
         setDeltaClock(Math.random() * 3); // offset the movement of the small invaders
     }
