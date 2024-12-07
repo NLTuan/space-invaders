@@ -14,12 +14,14 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Text;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,6 +60,15 @@ public class MainAppFXMLController {
     
     private static HashMap<String, String> spriteMap = new HashMap<String, String>();
 
+    @FXML
+    private ImageView bgImage;
+    
+    @FXML
+    private Text stageText;
+    
+    @FXML
+    private Text livesText;
+    
     public int getWindowWidth() {
         return windowWidth;
     }
@@ -91,16 +102,17 @@ public class MainAppFXMLController {
     @FXML
     public void initialize() {
         logger.info("Initializing MainAppController...");
-        ImageView bgImg = new ImageView("/sprite_images/Starset.png");
-        animationPanel.getChildren().add(bgImg);
+        
         spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
                 (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", spriteMap.get("playerShip"), playerSpeed, playerBulletSpeed);
         animationPanel.setPrefSize(SpaceShooterApp.screenWidth, SpaceShooterApp.screenWidth);
+
         animationPanel.getChildren().add(spaceShip);
         animationPanel.setStyle(" -fx-background-color: black;");
         input = new ArrayList<>();
         gameManager = new GameManager(this, animationPanel);
+        livesText.setText("Lives: " + spaceShip.getLives());
     }
 
     public void setupGameWorld() {
@@ -216,8 +228,25 @@ public class MainAppFXMLController {
         }
         if(levelUp){
             gameManager.levelUp();
-            gameManager.spawnInvaders();
             spaceShip.levelUp();
+            stageText.setText("Stage: " + gameManager.getLevel());
+            switch (gameManager.getLevel()) {
+                case 1:
+                    bgImage.setImage(new Image(getClass().getResource("/bgimages/dueling_stars.png").toExternalForm()));
+                    break;
+                case 2:
+                    bgImage.setImage(new Image(getClass().getResource("/bgimages/Starset.png").toExternalForm()));
+                    break;
+                default:
+                    bgImage.setImage(new Image(getClass().getResource("/bgimages/Starsetcolorful.png").toExternalForm()));
+                    break;
+            }
+            bgImage.setFitWidth(animationPanel.getWidth());
+            bgImage.setFitHeight(animationPanel.getHeight());
+
+
+            gameManager.spawnInvaders();
+            
         }
         
     }

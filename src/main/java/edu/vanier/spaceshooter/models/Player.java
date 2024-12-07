@@ -13,6 +13,8 @@ public class Player extends FiringSprite{
     private double internalShootingClock;
     
     private String laserString = MainAppFXMLController.getSpriteMap().get("playerLaser");
+    
+    private int lives = 5;
 
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -112,6 +114,14 @@ public class Player extends FiringSprite{
 
     public void setMaxStage(int maxStage) {
         this.maxStage = maxStage;
+    }
+
+    public int getLives() {
+        return lives;
+    }
+
+    public void setLives(int lives) {
+        this.lives = lives;
     }
     
     

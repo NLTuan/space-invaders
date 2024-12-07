@@ -4,8 +4,6 @@ import edu.vanier.geometry.Vector;
 import edu.vanier.spaceshooter.SpaceShooterApp;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 
 public class Sprite extends ImageView {
 
@@ -18,7 +16,7 @@ public class Sprite extends ImageView {
 
     public Sprite(int x, int y, int width, int height, String type, String imagePath, double speed) {
         super();
-        setImage(new Image(getClass().getResource("/sprite_images/" + imagePath).toExternalForm()));
+        setImage(new Image(getClass().getResource("/spriteimages/" + imagePath).toExternalForm()));
         setFitWidth(width);
         setFitHeight(height);
         this.type = type;
@@ -32,7 +30,7 @@ public class Sprite extends ImageView {
 
     public Sprite(int x, int y, int width, int height, String type, String imagePath ,double speed, Vector direction) {
         super();
-        setImage(new Image(getClass().getResource("/sprite_images/" + imagePath).toExternalForm()));
+        setImage(new Image(getClass().getResource("/spriteimages/" + imagePath).toExternalForm()));
         setFitWidth(width);
         setFitHeight(height);
         this.type = type;
