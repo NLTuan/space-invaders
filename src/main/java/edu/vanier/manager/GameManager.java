@@ -23,7 +23,9 @@ public class GameManager {
     
     private MainAppFXMLController controller;
     private Pane animPane;
+    private int score = 0;
     
+    private boolean gameOver = false;
 
     public GameManager(MainAppFXMLController controller, Pane animPane) {
         level = 0;
@@ -151,5 +153,29 @@ public class GameManager {
     public void levelUp(){
         level++;
     }    
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+    
+    public void increaseScore(int score){
+        this.score += score;
+        if (this.score < 0){
+            this.score = 0;
+        }
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void setGameOver(boolean gameOver) {
+        this.gameOver = gameOver;
+    }
+    
     
 }

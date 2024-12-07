@@ -18,6 +18,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -69,6 +70,16 @@ public class MainAppFXMLController {
     @FXML
     private Text livesText;
     
+    @FXML
+    private Text scoreText;
+    
+    @FXML
+    private Text tipText;
+    
+    @FXML
+    private HBox tipHBox;
+    
+    
     public int getWindowWidth() {
         return windowWidth;
     }
@@ -95,9 +106,6 @@ public class MainAppFXMLController {
         spriteMap.put("mediumInvader", "mediumInvader.png");
         spriteMap.put("bigInvader", "bigInvader.png");
     }
-
-    
-    
     
     @FXML
     public void initialize() {
@@ -113,6 +121,9 @@ public class MainAppFXMLController {
         input = new ArrayList<>();
         gameManager = new GameManager(this, animationPanel);
         livesText.setText("Lives: " + spaceShip.getLives());
+        tipHBox.prefWidthProperty().bind(animationPanel.widthProperty());
+        bgImage.fitWidthProperty().bind(animationPanel.widthProperty());
+        bgImage.fitHeightProperty().bind(animationPanel.heightProperty());
     }
 
     public void setupGameWorld() {
@@ -226,7 +237,7 @@ public class MainAppFXMLController {
                 break;
             }
         }
-        if(levelUp){
+        if(levelUp && !gameManager.isGameOver()){
             gameManager.levelUp();
             spaceShip.levelUp();
             stageText.setText("Stage: " + gameManager.getLevel());
@@ -241,14 +252,8 @@ public class MainAppFXMLController {
                     bgImage.setImage(new Image(getClass().getResource("/bgimages/Starsetcolorful.png").toExternalForm()));
                     break;
             }
-            bgImage.setFitWidth(animationPanel.getWidth());
-            bgImage.setFitHeight(animationPanel.getHeight());
-
-
             gameManager.spawnInvaders();
-            
         }
-        
     }
 
     private void processSprite(Sprite sprite) {
@@ -286,6 +291,44 @@ public class MainAppFXMLController {
         Player playerSprite = (Player) sprite;
         playerSprite.setInternalShootingClock(playerSprite.getInternalShootingClock() + elapsedTime);
         sprite.move(elapsedTime);
+        
+        for (Sprite enemy : getSprites()) {
+            if (enemy instanceof Invader) {
+                // Check for collision with an enemy
+                if (sprite.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
+                    ((Invader) enemy).setHitpoints(((Invader) enemy).getHitpoints() - 1);
+
+                    // Handle player after collision with enemy
+                    if (playerSprite.getLives() > 1){
+                        playerSprite.setLives(playerSprite.getLives() - 1);
+                        livesText.setText("Lives: " + playerSprite.getLives());
+                    }
+                    else{
+                        playerSprite.setLives(playerSprite.getLives() - 1);
+                        livesText.setText("Lives: " + playerSprite.getLives());
+                        playerSprite.setDead(true);
+                        
+                        gameOver(); // Terminate game
+                    }
+                    // Handle enemy after collision
+                    if (((Invader) enemy).getHitpoints() == 0){
+                        enemy.setDead(true);
+                        ((Invader) enemy).getHpBar().setDead(true);
+                        if(enemy instanceof SmallInvader){
+                            gameManager.increaseScore(200);
+                        }
+                        else if(enemy instanceof MediumInvader){
+                            gameManager.increaseScore(400);
+                        }
+                        else if(enemy instanceof BigInvader){
+                            gameManager.increaseScore(3000);
+                        }
+                        scoreText.setText("Score: " + gameManager.getScore());
+                    }
+
+                }
+            }
+        }
     }
     private void handleEnemyBullet(Sprite sprite) {
         if(sprite instanceof BigBullet){
@@ -295,8 +338,21 @@ public class MainAppFXMLController {
         sprite.move(elapsedTime);
         // Check for collision with the spaceship
         if (sprite.getBoundsInParent().intersects(spaceShip.getBoundsInParent())) {
-            spaceShip.setDead(true);
-            sprite.setDead(true);
+            if (spaceShip.getLives() > 1){
+                sprite.setDead(true);
+                System.out.println(spaceShip.getLives());
+                spaceShip.setLives(spaceShip.getLives() - 1);
+                livesText.setText("Lives: " + spaceShip.getLives());
+            }
+            else{
+                spaceShip.setLives(spaceShip.getLives() - 1);
+                livesText.setText("Lives: " + spaceShip.getLives());
+                spaceShip.setDead(true);
+                sprite.setDead(true);
+                
+                gameOver();
+            }
+                
         }
     }
 
@@ -312,6 +368,16 @@ public class MainAppFXMLController {
                         enemy.setDead(true);
                         ((Invader) enemy).getHpBar().setDead(true);
                         sprite.setDead(true);
+                        if(enemy instanceof SmallInvader){
+                            gameManager.increaseScore(200);
+                        }
+                        else if(enemy instanceof MediumInvader){
+                            gameManager.increaseScore(400);
+                        }
+                        else if(enemy instanceof BigInvader){
+                            gameManager.increaseScore(3000);
+                        }
+                        scoreText.setText("Score: " + gameManager.getScore());
                     }
                     else{
                         sprite.setDead(true);
@@ -337,6 +403,8 @@ public class MainAppFXMLController {
             if (input.contains(KeyCode.SPACE)) {
                 shoot((FiringSprite) sprite);
                 player.setInternalShootingClock(0);
+                gameManager.increaseScore(-10);
+                scoreText.setText("Score: " + gameManager.getScore());
             }
         }
     }
@@ -423,10 +491,11 @@ public class MainAppFXMLController {
     
     private boolean outOfBounds(Sprite sprite){
         double tolerance = 20;
-        if ((sprite.getTranslateX() + sprite.getFitWidth() < -tolerance)
+        if ((sprite.getTranslateX() + sprite.getFitWidth() < -tolerance
                 || (sprite.getTranslateX() > mainScene.getWidth() + tolerance)
                 || (sprite.getTranslateY() + sprite.getFitHeight()< -tolerance)
-                || (sprite.getTranslateY() > mainScene.getHeight() + tolerance)
+                || (sprite.getTranslateY() > mainScene.getHeight() + tolerance))
+                && sprite.getType().contains("bullet")
                 ){
             return true;
         }
@@ -496,6 +565,19 @@ public class MainAppFXMLController {
 
     public void setMainScene(Scene mainScene) {
         this.mainScene = mainScene;
+    }
+
+    private void gameOver() {
+        gameManager.setGameOver(true);
+        for(Node n: animationPanel.getChildren()){
+            if (n instanceof Sprite){
+                ((Sprite) n).setDead(true);
+            }
+            else if (n instanceof HpBar){
+                ((HpBar) n).setDead(true);
+            }
+        }
+        
     }
     
     
