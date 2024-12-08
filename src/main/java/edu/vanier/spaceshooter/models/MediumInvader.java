@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class MediumInvader extends Invader {
     
@@ -16,14 +18,23 @@ public class MediumInvader extends Invader {
 
     public MediumInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(4);
+        setFiringCooldown(3);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);
-        setHitpoints(4);
-        setHpMax(4);
+        setHitpoints(6);
+        setHpMax(6);
+        
+        setDeltaClock(Math.random() * 3);
     }
 
     public ArrayList<Sprite> shoot() {
+        
+        String musicFile = "/sfx/mediumInvaderLaser.wav";
+
+        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+        
         int width = 100;
         int height = 25;
         ArrayList<Sprite> bullets = new ArrayList<>();

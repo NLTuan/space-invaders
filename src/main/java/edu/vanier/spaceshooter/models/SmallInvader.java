@@ -7,6 +7,8 @@ import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 
 public class SmallInvader extends Invader{
     private String laserString = MainAppFXMLController.getSpriteMap().get("bulletSmall");
@@ -23,6 +25,13 @@ public class SmallInvader extends Invader{
     }
 
     public ArrayList<Sprite> shoot() {
+        
+        String musicFile = "/sfx/smallInvaderLaser.wav";     // For example
+
+        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+        
         int width = 40;
         int height = 40;
         ArrayList<Sprite> bullets = new ArrayList<>();

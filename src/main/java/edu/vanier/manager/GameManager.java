@@ -92,7 +92,7 @@ public class GameManager {
                
             }
             default -> {
-                enemiesPerRow = 7;
+                enemiesPerRow = (level * 2) + 1;
                 numOfRows = 3;
                 int spacingX = (int)animPane.getWidth()/enemiesPerRow;
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
@@ -177,5 +177,9 @@ public class GameManager {
         this.gameOver = gameOver;
     }
     
-    
+    public void reset(){
+        gameOver = false;
+        level = 0;
+        score = 0;
+    }
 }

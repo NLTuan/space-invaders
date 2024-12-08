@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<Pane fx:id="mainMenuPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/20.0.2" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ImageView fx:id="bgImg" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true">
+         <image>
+            <Image url="@../bgimages/dueling_stars.png" />
+         </image>
+      </ImageView>
+      <VBox fx:id="menuVBox" alignment="CENTER" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="SPACE SHOOTER" />
+            <Button fx:id="playButton" mnemonicParsing="false" text="Play!" />
+         </children>
+      </VBox>
+   </children>
+</Pane>

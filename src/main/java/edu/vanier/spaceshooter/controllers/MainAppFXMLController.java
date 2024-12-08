@@ -14,12 +14,16 @@ import javafx.animation.AnimationTimer;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -79,7 +83,15 @@ public class MainAppFXMLController {
     @FXML
     private HBox tipHBox;
     
+    @FXML
+    private VBox gameOverVBox;
     
+    @FXML
+    private Text gameOverScoreText;
+    
+    @FXML 
+    private Button replayButton;
+           
     public int getWindowWidth() {
         return windowWidth;
     }
@@ -114,21 +126,38 @@ public class MainAppFXMLController {
         spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
                 (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", spriteMap.get("playerShip"), playerSpeed, playerBulletSpeed);
-        animationPanel.setPrefSize(SpaceShooterApp.screenWidth, SpaceShooterApp.screenWidth);
-
         animationPanel.getChildren().add(spaceShip);
-        animationPanel.setStyle(" -fx-background-color: black;");
+        
         input = new ArrayList<>();
+        
         gameManager = new GameManager(this, animationPanel);
         livesText.setText("Lives: " + spaceShip.getLives());
         tipHBox.prefWidthProperty().bind(animationPanel.widthProperty());
         bgImage.fitWidthProperty().bind(animationPanel.widthProperty());
         bgImage.fitHeightProperty().bind(animationPanel.heightProperty());
+        
+        gameOverVBox.prefWidthProperty().bind(animationPanel.widthProperty());
+        gameOverVBox.prefHeightProperty().bind(animationPanel.heightProperty());
+        
+
     }
 
     public void setupGameWorld() {
         initGameLoop();
         setupKeyPressHandlers();
+        
+        replayButton.setOnAction((event) -> {
+            gameLoop.start();
+            replayButton.setDisable(true);
+            gameOverVBox.setOpacity(0);
+            spaceShip = new Player(
+                SpaceShooterApp.screenWidth/2, 
+                (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", spriteMap.get("playerShip"), playerSpeed, playerBulletSpeed);
+            animationPanel.getChildren().add(spaceShip);
+            gameManager.reset();
+            livesText.setText("Lives: " + spaceShip.getLives());
+            scoreText.setText("Score: " + gameManager.getScore());
+        });
     }
 
     private void initGameLoop() {
@@ -172,10 +201,6 @@ public class MainAppFXMLController {
 
         });
     }
-
-//    private void generateInvaders() {
-//        gameManager.spawnInvaders();
-//    }
 
     /**
      * Retrieves a list of all sprites currently in the animation panel.
@@ -254,6 +279,10 @@ public class MainAppFXMLController {
             }
             gameManager.spawnInvaders();
         }
+        else if (gameManager.isGameOver()){
+            gameOver();
+            gameLoop.stop();
+        }
     }
 
     private void processSprite(Sprite sprite) {
@@ -296,19 +325,23 @@ public class MainAppFXMLController {
             if (enemy instanceof Invader) {
                 // Check for collision with an enemy
                 if (sprite.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
-                    ((Invader) enemy).setHitpoints(((Invader) enemy).getHitpoints() - 1);
+                    ((Invader) enemy).setHitpoints(0);
 
                     // Handle player after collision with enemy
                     if (playerSprite.getLives() > 1){
                         playerSprite.setLives(playerSprite.getLives() - 1);
                         livesText.setText("Lives: " + playerSprite.getLives());
+                        String musicFile = "/sfx/damage.mp3";
+                        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+                        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                        mediaPlayer.play();
                     }
                     else{
                         playerSprite.setLives(playerSprite.getLives() - 1);
                         livesText.setText("Lives: " + playerSprite.getLives());
                         playerSprite.setDead(true);
                         
-                        gameOver(); // Terminate game
+                        gameManager.setGameOver(true); // Terminate game
                     }
                     // Handle enemy after collision
                     if (((Invader) enemy).getHitpoints() == 0){
@@ -343,6 +376,10 @@ public class MainAppFXMLController {
                 System.out.println(spaceShip.getLives());
                 spaceShip.setLives(spaceShip.getLives() - 1);
                 livesText.setText("Lives: " + spaceShip.getLives());
+                String musicFile = "/sfx/damage.mp3";
+                Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+                MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                mediaPlayer.play();
             }
             else{
                 spaceShip.setLives(spaceShip.getLives() - 1);
@@ -350,7 +387,7 @@ public class MainAppFXMLController {
                 spaceShip.setDead(true);
                 sprite.setDead(true);
                 
-                gameOver();
+                gameManager.setGameOver(true); // Terminate game
             }
                 
         }
@@ -390,7 +427,7 @@ public class MainAppFXMLController {
 
     private void handleEnemyFiring(Sprite sprite) {
         Invader invader = (Invader) sprite;
-        if (totalElapsedTime % invader.getFiringCooldown() < 0.01) {
+        if ((totalElapsedTime + invader.getDeltaClock()) % invader.getFiringCooldown() < 0.01) {
             if (Math.random() < 0.3) {
                 shoot(invader);
             }
@@ -401,7 +438,7 @@ public class MainAppFXMLController {
         Player player = (Player) sprite;
         if (player.getInternalShootingClock() >= player.getFiringCooldown()) {
             if (input.contains(KeyCode.SPACE)) {
-                shoot((FiringSprite) sprite);
+                shoot(player);
                 player.setInternalShootingClock(0);
                 gameManager.increaseScore(-10);
                 scoreText.setText("Score: " + gameManager.getScore());
@@ -492,9 +529,9 @@ public class MainAppFXMLController {
     private boolean outOfBounds(Sprite sprite){
         double tolerance = 20;
         if ((sprite.getTranslateX() + sprite.getFitWidth() < -tolerance
-                || (sprite.getTranslateX() > mainScene.getWidth() + tolerance)
+                || (sprite.getTranslateX() > animationPanel.getPrefWidth() + tolerance)
                 || (sprite.getTranslateY() + sprite.getFitHeight()< -tolerance)
-                || (sprite.getTranslateY() > mainScene.getHeight() + tolerance))
+                || (sprite.getTranslateY() > animationPanel.getPrefWidth() + tolerance))
                 && sprite.getType().contains("bullet")
                 ){
             return true;
@@ -568,17 +605,20 @@ public class MainAppFXMLController {
     }
 
     private void gameOver() {
-        gameManager.setGameOver(true);
-        for(Node n: animationPanel.getChildren()){
-            if (n instanceof Sprite){
-                ((Sprite) n).setDead(true);
-            }
-            else if (n instanceof HpBar){
-                ((HpBar) n).setDead(true);
-            }
-        }
         
+        String musicFile = "/sfx/gameOver.wav";     // For example
+
+        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+        
+        gameOverVBox.setOpacity(1);
+        replayButton.setDisable(false);
+        gameOverScoreText.setText("Final score: " + gameManager.getScore());
+        
+        
+        animationPanel.getChildren().removeIf((t) -> {
+            return (t instanceof Sprite || t instanceof HpBar);
+        });
     }
-    
-    
 }

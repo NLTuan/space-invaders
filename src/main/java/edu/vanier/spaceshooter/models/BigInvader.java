@@ -9,6 +9,8 @@ import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import java.util.ArrayList;
 import java.util.Random;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 /**
@@ -37,6 +39,13 @@ public class BigInvader extends Invader{
     }
 
     public ArrayList<Sprite> shoot() {
+        
+        String musicFile = "/sfx/bigInvaderLaser.wav";
+
+        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+        
         int width = 80;
         int height = 20;
         ArrayList<Sprite> bullets = new ArrayList<>();
