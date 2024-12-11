@@ -101,7 +101,7 @@ public class GameManager {
                     for (int i = 0; i < enemiesPerRow; i++) {
                         Invader invader = null;
                         if (j == 0){
-                            if (i == 3){
+                            if (i % 7 == 3){
                                 invader = new BigInvader(
                                     (int)topLeft.getX() + i * spacingX,
                                     (int)topLeft.getY() + j * spacingY, 60, 60, "enemy",

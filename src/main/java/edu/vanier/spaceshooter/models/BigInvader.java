@@ -27,7 +27,7 @@ public class BigInvader extends Invader{
     
     public BigInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed, Sprite target, double momentum) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(0.5);
+        setFiringCooldown(0.75);
         setMovementCooldown(3);
         setPauseCooldown(0.5);
         
@@ -36,6 +36,9 @@ public class BigInvader extends Invader{
         
         setHitpoints(50);
         setHpMax(50);
+        
+        setDeltaClock(Math.random() * 5);
+
     }
 
     public ArrayList<Sprite> shoot() {
@@ -115,8 +118,8 @@ public class BigInvader extends Invader{
     }
 
     public void updateMovement(){
-        if (getTranslateX() + getFitWidth() > SpaceShooterApp.screenWidth * 0.9
-                || getTranslateX() < SpaceShooterApp.screenWidth * 0.1
+        if (((getTranslateX() + getFitWidth() > SpaceShooterApp.screenWidth * 0.8) && xDir > 0)
+                || ((getTranslateX() < SpaceShooterApp.screenWidth * 0.2) && xDir < 0)
         ){
             xDir = -xDir;
         }

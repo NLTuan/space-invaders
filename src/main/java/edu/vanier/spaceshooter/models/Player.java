@@ -16,7 +16,7 @@ public class Player extends FiringSprite{
     
     private String laserString = MainAppFXMLController.getSpriteMap().get("playerLaser");
     
-    private int lives = 5;
+    private int lives = 50000;
 
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -49,7 +49,7 @@ public class Player extends FiringSprite{
         ArrayList<Sprite> bullets = new ArrayList<>();
         switch (stage) {
             case 1 -> {
-                setFiringCooldown(0.001);
+                setFiringCooldown(0.01);
                 bullets.add(new Sprite(
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
@@ -75,7 +75,7 @@ public class Player extends FiringSprite{
                 }
             }
             case 3 -> {
-                setFiringCooldown(0.7);
+                setFiringCooldown(0.01);
                 for (double i = -1; i < 1.1; i+=0.50) {
                     for (double j = -1; j < 1.1; j+=0.50) {
                         if (i == 0 && j==0) {

@@ -24,6 +24,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
@@ -221,6 +222,14 @@ public class MainAppFXMLController {
         }
         return spriteList;
     }
+    
+    private void updateExplosions() {
+        for (Node n : animationPanel.getChildren()) {
+            if (n instanceof Explosion) {
+                ((Explosion) n).decreaseTime(elapsedTime);
+            }
+        }
+    }
 
     /**
      * Updates the game state for each frame.
@@ -235,6 +244,7 @@ public class MainAppFXMLController {
     private void update(long now) {
         elapsedTime = (now - lastNanoTime) / 1E9;
         totalElapsedTime += elapsedTime;
+        
         // Actions to be performed during each frame of the animation.
 
         if(input.contains(KeyCode.E) && !weaponSwitchPressed){
@@ -249,8 +259,11 @@ public class MainAppFXMLController {
         spaceShip.setDirection(direction);
         
         getSprites().forEach(this::processSprite);
+        
+        updateExplosions();
+
         removeDeadSprites();
-        lastNanoTime = System.nanoTime();
+        
         
         SpaceShooterApp.screenWidth = (int)animationPanel.getWidth();
         SpaceShooterApp.screenHeight = (int)animationPanel.getHeight();
@@ -283,6 +296,9 @@ public class MainAppFXMLController {
             gameOver();
             gameLoop.stop();
         }
+        
+        lastNanoTime = System.nanoTime();
+
     }
 
     private void processSprite(Sprite sprite) {
@@ -404,7 +420,6 @@ public class MainAppFXMLController {
                     if (((Invader) enemy).getHitpoints() == 0){
                         enemy.setDead(true);
                         ((Invader) enemy).getHpBar().setDead(true);
-                        sprite.setDead(true);
                         if(enemy instanceof SmallInvader){
                             gameManager.increaseScore(200);
                         }
@@ -415,10 +430,13 @@ public class MainAppFXMLController {
                             gameManager.increaseScore(3000);
                         }
                         scoreText.setText("Score: " + gameManager.getScore());
+                        
+                        
+                        Explosion explosion = new Explosion(enemy, "/animations/explosion.gif", 0.5);
+                        animationPanel.getChildren().add(explosion);
                     }
-                    else{
-                        sprite.setDead(true);
-                    }
+                    sprite.setDead(true);
+
 
                 }
             }
@@ -488,6 +506,9 @@ public class MainAppFXMLController {
                 HpBar hpBar = (HpBar) n;
                 return hpBar.isDead();
             }
+            else if (n instanceof Explosion){
+                return ((Explosion) n).getTimeLeft() <= 0;
+            }
             return false;
         });
     }
@@ -529,9 +550,9 @@ public class MainAppFXMLController {
     private boolean outOfBounds(Sprite sprite){
         double tolerance = 20;
         if ((sprite.getTranslateX() + sprite.getFitWidth() < -tolerance
-                || (sprite.getTranslateX() > animationPanel.getPrefWidth() + tolerance)
+                || (sprite.getTranslateX() > animationPanel.getWidth()+ tolerance)
                 || (sprite.getTranslateY() + sprite.getFitHeight()< -tolerance)
-                || (sprite.getTranslateY() > animationPanel.getPrefWidth() + tolerance))
+                || (sprite.getTranslateY() > animationPanel.getHeight()+ tolerance))
                 && sprite.getType().contains("bullet")
                 ){
             return true;
@@ -611,7 +632,7 @@ public class MainAppFXMLController {
         Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
-        
+        input.removeAll(input);
         gameOverVBox.setOpacity(1);
         replayButton.setDisable(false);
         gameOverScoreText.setText("Final score: " + gameManager.getScore());
