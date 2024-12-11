@@ -34,5 +34,13 @@
             <Text fx:id="scoreText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Score: 0" />
          </children>
       </VBox>
+      <VBox fx:id="gameCompleteVBox" alignment="CENTER" layoutX="10.0" layoutY="10.0" opacity="0.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0">
+         <children>
+            <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME COMPLETE!" />
+            <Text fx:id="gameCompleteScoreText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+            <Button fx:id="continueButton" disable="true" mnemonicParsing="false" text="Continue Playing" />
+            <Button fx:id="replayButtonComplete" disable="true" mnemonicParsing="false" text="Play again" />
+         </children>
+      </VBox>
    </children>
 </Pane>

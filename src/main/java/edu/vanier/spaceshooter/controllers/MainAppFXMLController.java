@@ -93,6 +93,18 @@ public class MainAppFXMLController {
     @FXML 
     private Button replayButton;
            
+    @FXML
+    private VBox gameCompleteVBox;
+    
+    @FXML
+    private Text gameCompleteScoreText;
+    
+    @FXML
+    private Button continueButton;
+    
+    @FXML
+    private Button replayButtonComplete;
+    
     public int getWindowWidth() {
         return windowWidth;
     }
@@ -140,6 +152,8 @@ public class MainAppFXMLController {
         gameOverVBox.prefWidthProperty().bind(animationPanel.widthProperty());
         gameOverVBox.prefHeightProperty().bind(animationPanel.heightProperty());
         
+        gameCompleteVBox.prefWidthProperty().bind(animationPanel.widthProperty());
+        gameCompleteVBox.prefHeightProperty().bind(animationPanel.heightProperty());
 
     }
 
@@ -158,6 +172,32 @@ public class MainAppFXMLController {
             gameManager.reset();
             livesText.setText("Lives: " + spaceShip.getLives());
             scoreText.setText("Score: " + gameManager.getScore());
+        });
+        
+        replayButtonComplete.setOnAction((event) -> {
+            gameLoop.start();
+            continueButton.setDisable(true);
+            replayButtonComplete.setDisable(true);
+            gameCompleteVBox.setOpacity(0);
+            spaceShip = new Player(
+                SpaceShooterApp.screenWidth/2, 
+                (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", spriteMap.get("playerShip"), playerSpeed, playerBulletSpeed);
+            animationPanel.getChildren().add(spaceShip);
+            gameManager.reset();
+            livesText.setText("Lives: " + spaceShip.getLives());
+            scoreText.setText("Score: " + gameManager.getScore());
+        });
+        
+        continueButton.setOnAction((event) -> {
+            gameLoop.start();
+            continueButton.setDisable(true);
+            replayButtonComplete.setDisable(true);
+            gameCompleteVBox.setOpacity(0);
+            animationPanel.getChildren().add(spaceShip);
+            gameManager.setGameOver(false);
+            livesText.setText("Lives: " + spaceShip.getLives());
+            scoreText.setText("Score: " + gameManager.getScore());
+            gameManager.spawnInvaders();
         });
     }
 
@@ -275,7 +315,13 @@ public class MainAppFXMLController {
                 break;
             }
         }
+        
+        
         if(levelUp && !gameManager.isGameOver()){
+            
+            if (gameManager.getLevel() == 3){
+                gameManager.setGameOver(true);
+            }
             gameManager.levelUp();
             spaceShip.levelUp();
             stageText.setText("Stage: " + gameManager.getLevel());
@@ -290,7 +336,13 @@ public class MainAppFXMLController {
                     bgImage.setImage(new Image(getClass().getResource("/bgimages/Starsetcolorful.png").toExternalForm()));
                     break;
             }
-            gameManager.spawnInvaders();
+            if (!gameManager.isGameOver()){
+                gameManager.spawnInvaders();
+            }
+        }
+        else if (gameManager.isGameOver() && spaceShip.getLives() > 0){
+            gameComplete();
+            gameLoop.stop();
         }
         else if (gameManager.isGameOver()){
             gameOver();
@@ -346,6 +398,7 @@ public class MainAppFXMLController {
                     // Handle player after collision with enemy
                     if (playerSprite.getLives() > 1){
                         playerSprite.setLives(playerSprite.getLives() - 1);
+                        
                         livesText.setText("Lives: " + playerSprite.getLives());
                         String musicFile = "/sfx/damage.mp3";
                         Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
@@ -353,7 +406,7 @@ public class MainAppFXMLController {
                         mediaPlayer.play();
                     }
                     else{
-                        playerSprite.setLives(playerSprite.getLives() - 1);
+                        playerSprite.setLives(0);
                         livesText.setText("Lives: " + playerSprite.getLives());
                         playerSprite.setDead(true);
                         
@@ -373,6 +426,9 @@ public class MainAppFXMLController {
                             gameManager.increaseScore(3000);
                         }
                         scoreText.setText("Score: " + gameManager.getScore());
+                        
+                        Explosion explosion = new Explosion(enemy, "/animations/explosion.gif", 0.7);
+                        animationPanel.getChildren().add(explosion);
                     }
 
                 }
@@ -403,6 +459,9 @@ public class MainAppFXMLController {
                 spaceShip.setDead(true);
                 sprite.setDead(true);
                 
+                Explosion explosion = new Explosion(spaceShip, "/animations/explosion.gif", 0.7);
+                animationPanel.getChildren().add(explosion);
+                
                 gameManager.setGameOver(true); // Terminate game
             }
                 
@@ -416,7 +475,10 @@ public class MainAppFXMLController {
                 // Check for collision with an enemy
                 if (sprite.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
                     ((Invader) enemy).setHitpoints(((Invader) enemy).getHitpoints() - 1);
-
+                    String musicFile = "/sfx/enemyHit.mp3";
+                    Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+                    MediaPlayer mediaPlayer = new MediaPlayer(sound);
+                    mediaPlayer.play();
                     if (((Invader) enemy).getHitpoints() == 0){
                         enemy.setDead(true);
                         ((Invader) enemy).getHpBar().setDead(true);
@@ -431,12 +493,11 @@ public class MainAppFXMLController {
                         }
                         scoreText.setText("Score: " + gameManager.getScore());
                         
-                        
-                        Explosion explosion = new Explosion(enemy, "/animations/explosion.gif", 0.5);
+                        Explosion explosion = new Explosion(enemy, "/animations/explosion.gif", 0.7);
                         animationPanel.getChildren().add(explosion);
                     }
                     sprite.setDead(true);
-
+                    
 
                 }
             }
@@ -627,19 +688,42 @@ public class MainAppFXMLController {
 
     private void gameOver() {
         
-        String musicFile = "/sfx/gameOver.wav";     // For example
+        String musicFile = "/sfx/gameOver.wav";
 
         Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
         MediaPlayer mediaPlayer = new MediaPlayer(sound);
         mediaPlayer.play();
+        
+        gameOverVBox.setViewOrder(-1);
+        gameCompleteVBox.setViewOrder(0);
         input.removeAll(input);
         gameOverVBox.setOpacity(1);
         replayButton.setDisable(false);
         gameOverScoreText.setText("Final score: " + gameManager.getScore());
         
+        animationPanel.getChildren().removeIf((t) -> {
+            return (t instanceof Sprite || t instanceof HpBar || t instanceof Explosion);
+        });
+    }
+    
+    private void gameComplete(){
+        String musicFile = "/sfx/victory.mp3";
+
+        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
+        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        mediaPlayer.play();
+        
+        gameCompleteVBox.setViewOrder(-1);
+        gameOverVBox.setViewOrder(0);
+        input.removeAll(input);
+        gameCompleteVBox.setOpacity(1);
+        replayButtonComplete.setDisable(false);
+        continueButton.setDisable(false);
+        gameCompleteScoreText.setText("Score: " + gameManager.getScore());
+        
         
         animationPanel.getChildren().removeIf((t) -> {
-            return (t instanceof Sprite || t instanceof HpBar);
+            return (t instanceof Sprite || t instanceof HpBar || t instanceof Explosion);
         });
     }
 }
