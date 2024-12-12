@@ -5,6 +5,7 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.helpers.AudioPlayer;
 import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class BigInvader extends Invader{
     Sprite target;
     double momentum;
     
-    private String laserString = MainAppFXMLController.getSpriteMap().get("bulletBig");
+    private String laserString = "bulletBig.png";
     int xDir = 1;
     
     public BigInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed, Sprite target, double momentum) {
@@ -43,11 +44,8 @@ public class BigInvader extends Invader{
 
     public ArrayList<Sprite> shoot() {
         
-        String musicFile = "/sfx/bigInvaderLaser.wav";
-
-        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+        AudioPlayer bigLaserTune = new AudioPlayer("/sfx/bigInvaderLaser.wav");
+        bigLaserTune.play();
         
         int width = 80;
         int height = 20;

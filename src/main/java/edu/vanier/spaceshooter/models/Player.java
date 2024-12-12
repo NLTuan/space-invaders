@@ -1,6 +1,7 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.helpers.AudioPlayer;
 import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import java.io.File;
 
@@ -14,7 +15,7 @@ public class Player extends FiringSprite{
 
     private double internalShootingClock;
     
-    private String laserString = MainAppFXMLController.getSpriteMap().get("playerLaser");
+    private String laserString = "playerLaser.png";
     
     private int lives = 5;
 
@@ -24,11 +25,7 @@ public class Player extends FiringSprite{
 
     public void updateStage(){
         if(maxStage == 1){return;}
-
-        String musicFile = "/sfx/changeWeapon.wav";
-        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+        
         if(stage != maxStage){
             stage += 1;
         }
@@ -39,13 +36,10 @@ public class Player extends FiringSprite{
 
     public ArrayList<Sprite> shoot(){
         
-        String musicFile = "/sfx/playerLaser.wav";     // For example
-
-        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
+        AudioPlayer laserTune = new AudioPlayer("/sfx/playerLaser.wav");
+        laserTune.setVolume(0.1);
+        laserTune.play();
         
-        mediaPlayer.setVolume(0.1);
-        mediaPlayer.play();
         int width = 50;
         int height = 10;
         ArrayList<Sprite> bullets = new ArrayList<>();
@@ -64,7 +58,7 @@ public class Player extends FiringSprite{
                 );
             }
             case 2 -> {
-                setFiringCooldown(0.5);
+                setFiringCooldown(0.01);
                 for (double i = -0.25; i < 0.26; i+=0.25) {
                     bullets.add(new Sprite(
                             (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
@@ -100,12 +94,6 @@ public class Player extends FiringSprite{
     }
 
     public void levelUp(){
-        
-        String musicFile = "/sfx/levelUp.wav";     // For example
-
-        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
         if(maxStage < 3){
             maxStage += 1;
             stage = maxStage;

@@ -48,7 +48,7 @@ public class GameManager {
                         Invader invader = new SmallInvader(
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                MainAppFXMLController.getSpriteMap().get("smallInvader"),
+                                "smallInvader.png",
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                         );
@@ -70,7 +70,7 @@ public class GameManager {
                             invader = new SmallInvader(
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                MainAppFXMLController.getSpriteMap().get("smallInvader"),
+                                "smallInvader.png",
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -79,7 +79,7 @@ public class GameManager {
                             invader = new MediumInvader(
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                MainAppFXMLController.getSpriteMap().get("mediumInvader"),
+                                "mediumInvader.png",
                                 controller.getMediumInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -105,7 +105,7 @@ public class GameManager {
                                 invader = new BigInvader(
                                     (int)topLeft.getX() + i * spacingX,
                                     (int)topLeft.getY() + j * spacingY, 60, 60, "enemy",
-                                    MainAppFXMLController.getSpriteMap().get("bigInvader"),
+                                    "bigInvader.png",
                                     controller.getBigInvaderSpeed(),
                                     controller.getEnemyBulletSpeed(),
                                     controller.getSpaceShip(),
@@ -117,7 +117,7 @@ public class GameManager {
                             invader = new SmallInvader(
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                MainAppFXMLController.getSpriteMap().get("smallInvader"),
+                                "smallInvader.png",
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -126,7 +126,7 @@ public class GameManager {
                             invader = new MediumInvader(
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                MainAppFXMLController.getSpriteMap().get("mediumInvader"),
+                                "mediumInvader.png",
                                 controller.getMediumInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );

@@ -1,6 +1,7 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
+import edu.vanier.helpers.AudioPlayer;
 import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import javafx.scene.paint.Color;
@@ -11,7 +12,7 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class SmallInvader extends Invader{
-    private String laserString = MainAppFXMLController.getSpriteMap().get("bulletSmall");
+    private String laserString = "bulletSmall.png";
     
     public SmallInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -26,11 +27,8 @@ public class SmallInvader extends Invader{
 
     public ArrayList<Sprite> shoot() {
         
-        String musicFile = "/sfx/smallInvaderLaser.wav";     // For example
-
-        Media sound = new Media(getClass().getResource(musicFile).toExternalForm());
-        MediaPlayer mediaPlayer = new MediaPlayer(sound);
-        mediaPlayer.play();
+        AudioPlayer smallLaserTune = new AudioPlayer("/sfx/smallInvaderLaser.wav");
+        smallLaserTune.play();
         
         int width = 40;
         int height = 40;
