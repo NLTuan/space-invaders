@@ -7,11 +7,26 @@ import edu.vanier.spaceshooter.SpaceShooterApp;
 import java.util.ArrayList;
 import java.util.Random;
 
+/**
+ * Small Invader #2: shoots 2 stars diagonally down, moves in random directions and pauses
+ * @author Le Tuan Huy Nguyen
+ */
 public class SmallInvader2 extends Invader{
     private String laserString = "bulletSmall.png";
     
-    public SmallInvader2(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
+    /**
+     * Constructor for SmallInvader2
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param type
+     * @param imagePath
+     * @param speed
+     * @param bulletSpeed 
+     */
+    public SmallInvader2(int x, int y, int width, int height, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, imagePath, speed, bulletSpeed);
         setFiringCooldown(3);
         setMovementCooldown(2);
         setPauseCooldown(0.8);

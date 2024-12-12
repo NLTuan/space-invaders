@@ -3,19 +3,29 @@ package edu.vanier.spaceshooter.models;
 import edu.vanier.geometry.Vector;
 import edu.vanier.helpers.AudioPlayer;
 import edu.vanier.spaceshooter.SpaceShooterApp;
-import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
+/**
+ * Small Invader #1: shoots a star straight down, moves in random directions and pauses
+ * @author Le Tuan Huy Nguyen
+ */
 public class SmallInvader1 extends Invader{
     private String laserString = "bulletSmall.png";
     
-    public SmallInvader1(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
+    /**
+     * Constructor for SmallInvader1
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param imagePath
+     * @param speed
+     * @param bulletSpeed 
+     */
+    public SmallInvader1(int x, int y, int width, int height, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, imagePath, speed, bulletSpeed);
         setFiringCooldown(3);
         setMovementCooldown(2);
         setPauseCooldown(0.8);
@@ -25,8 +35,8 @@ public class SmallInvader1 extends Invader{
         setDeltaClock(Math.random() * 3); // offset the movement of the small invaders
     }
 
+    
     public ArrayList<Sprite> shoot() {
-        
         AudioPlayer smallLaserTune = new AudioPlayer("/sfx/smallInvaderLaser.wav");
         smallLaserTune.play();
         

@@ -15,8 +15,9 @@ import javafx.scene.media.MediaPlayer;
 import javafx.scene.paint.Color;
 
 /**
- *
- * @author letua
+ * BigInvader or Boss: Shoots 5 homing (BigBullet) missiles at the player, moves side to side only
+ * 3 missiles are big but slow, 2 missiles are smaller but faster
+ * @author Le Tuan Huy Nguyen
  */
 public class BigInvader extends Invader{
     
@@ -26,8 +27,21 @@ public class BigInvader extends Invader{
     private String laserString = "bulletBig.png";
     int xDir = 1;
     
-    public BigInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed, Sprite target, double momentum) {
-        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
+    /**
+     * Constructor for BigInvader
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param imagePath the path of the image sprite
+     * @param speed the speed of the invader
+     * @param bulletSpeed the bullet speed
+     * @param target the target that the BigInvader shoots at 
+     * @param momentum lagging term for the BigBullet
+     */
+    
+    public BigInvader(int x, int y, int width, int height, String imagePath, double speed, double bulletSpeed, Sprite target, double momentum) {
+        super(x, y, width, height, imagePath, speed, bulletSpeed);
         setFiringCooldown(0.75);
         setMovementCooldown(3);
         setPauseCooldown(0.5);

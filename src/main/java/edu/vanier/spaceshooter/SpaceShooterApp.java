@@ -39,7 +39,7 @@ public class SpaceShooterApp extends Application {
             Button playButton = mainMenuController.getPlayButton();
             playButton.setOnAction((event) -> {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
-                controller = new MainAppFXMLController();
+                controller = new MainAppFXMLController(primaryStage);
                 loader.setController(controller);
                 Pane gameRoot = null;
                 try {
@@ -52,9 +52,8 @@ public class SpaceShooterApp extends Application {
                 controller.setupGameWorld();
                 primaryStage.setScene(mainScene);
             });
-//            controller = new MainAppFXMLController();
-//            loader.setController(controller);
-//            Pane root = loader.load();
+            
+            
 //            //-- 2) Create and set the scene to the stage.
             Scene mainMenuScene = new Scene(root, screenWidth, screenHeight);
             

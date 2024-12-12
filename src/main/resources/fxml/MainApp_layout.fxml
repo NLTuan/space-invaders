@@ -21,6 +21,7 @@
             <Text fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="GAME OVER" />
             <Text fx:id="gameOverScoreText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Button fx:id="replayButton" disable="true" mnemonicParsing="false" text="Play again" />
+            <Button fx:id="gameOverQuitButton" disable="true" mnemonicParsing="false" text="Quit" />
          </children>
       </VBox>
       <VBox prefHeight="200.0" prefWidth="100.0">
@@ -40,6 +41,7 @@
             <Text fx:id="gameCompleteScoreText" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
             <Button fx:id="continueButton" disable="true" mnemonicParsing="false" text="Continue Playing" />
             <Button fx:id="replayButtonComplete" disable="true" mnemonicParsing="false" text="Play again" />
+            <Button fx:id="winQuitButton" disable="true" mnemonicParsing="false" text="Quit" />
          </children>
       </VBox>
    </children>

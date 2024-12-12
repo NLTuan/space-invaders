@@ -3,22 +3,33 @@ package edu.vanier.spaceshooter.models;
 import edu.vanier.geometry.Vector;
 import edu.vanier.helpers.AudioPlayer;
 import edu.vanier.spaceshooter.SpaceShooterApp;
-import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
+/**
+ * Medium Invader #1: Moves either to the side or down, once it reached a certain point, it moves up
+ * Shoots bullets in a plus (+) or cross (x) or 8-star formation
+ * @author Le Tuan Huy Nguyen
+ */
 public class MediumInvader1 extends Invader {
     
     private boolean movingUp = false;
     
     private String laserString = "bulletMedium.png";
 
-    public MediumInvader1(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
+    /**
+     * Constructor or MediumInvader1
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param imagePath
+     * @param speed
+     * @param bulletSpeed 
+     */
+    public MediumInvader1(int x, int y, int width, int height, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, imagePath, speed, bulletSpeed);
         setFiringCooldown(3);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);

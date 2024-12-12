@@ -17,8 +17,8 @@ public abstract class Invader extends FiringSprite {
     
     private HpBar hpBar;
     
-    public Invader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
+    public Invader(int x, int y, int width, int height, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, "enemy", imagePath, speed, bulletSpeed);
         hpBar = new HpBar(this);
         
     }

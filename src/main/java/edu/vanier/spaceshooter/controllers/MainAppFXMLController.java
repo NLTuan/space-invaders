@@ -23,6 +23,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,6 +100,15 @@ public class MainAppFXMLController {
     @FXML
     private Button replayButtonComplete;
     
+    @FXML
+    private Button gameOverQuitButton;
+    
+    @FXML
+    private Button winQuitButton;
+    
+    private Stage primaryStage;
+    
+    
     public int getWindowWidth() {
         return windowWidth;
     }
@@ -114,6 +124,11 @@ public class MainAppFXMLController {
     public void setWindowHeight(int windowHeight) {
         this.windowHeight = windowHeight;
     }
+
+    public MainAppFXMLController(Stage primaryStage) {
+        this.primaryStage = primaryStage;
+    }
+    
     
     @FXML
     public void initialize() {
@@ -147,6 +162,8 @@ public class MainAppFXMLController {
         replayButton.setOnAction((event) -> {
             gameLoop.start();
             replayButton.setDisable(true);
+            gameOverQuitButton.setDisable(true);
+
             gameOverVBox.setOpacity(0);
             spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
@@ -161,6 +178,7 @@ public class MainAppFXMLController {
             gameLoop.start();
             continueButton.setDisable(true);
             replayButtonComplete.setDisable(true);
+            winQuitButton.setDisable(true);
             gameCompleteVBox.setOpacity(0);
             spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
@@ -175,6 +193,7 @@ public class MainAppFXMLController {
             gameLoop.start();
             continueButton.setDisable(true);
             replayButtonComplete.setDisable(true);
+            winQuitButton.setDisable(true);
             gameCompleteVBox.setOpacity(0);
             animationPanel.getChildren().add(spaceShip);
             gameManager.setGameOver(false);
@@ -191,6 +210,14 @@ public class MainAppFXMLController {
             
             gameManager.spawnInvaders();
         });
+        
+        gameOverQuitButton.setOnAction(((event) -> {
+            primaryStage.close();
+        }));
+        
+        winQuitButton.setOnAction(((event) -> {
+            primaryStage.close();
+        }));
     }
 
     private void initGameLoop() {
@@ -696,6 +723,7 @@ public class MainAppFXMLController {
         input.removeAll(input);
         gameOverVBox.setOpacity(1);
         replayButton.setDisable(false);
+        gameOverQuitButton.setDisable(false);
         gameOverScoreText.setText("Final score: " + gameManager.getScore());
         
         animationPanel.getChildren().removeIf((t) -> {
@@ -712,6 +740,7 @@ public class MainAppFXMLController {
         input.removeAll(input);
         gameCompleteVBox.setOpacity(1);
         replayButtonComplete.setDisable(false);
+        winQuitButton.setDisable(false);
         continueButton.setDisable(false);
         gameCompleteScoreText.setText("Score: " + gameManager.getScore());
         

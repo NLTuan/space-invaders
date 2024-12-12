@@ -52,7 +52,7 @@ public class GameManager {
                         Invader invader = getRandomSmallInvader(
                                 (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                (int)topLeft.getY() + j * spacingY, 30, 30,
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                         );
@@ -79,7 +79,7 @@ public class GameManager {
                             invader = getRandomSmallInvader(
                                 (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                (int)topLeft.getY() + j * spacingY, 30, 30,
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -88,7 +88,7 @@ public class GameManager {
                             invader = getRandomMediumInvader(
                                 (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                (int)topLeft.getY() + j * spacingY, 30, 30,
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -117,7 +117,7 @@ public class GameManager {
                             if (i == (enemiesPerRow / 2)){
                                 invader = new BigInvader(
                                     (int)topLeft.getX() + i * spacingX,
-                                    (int)topLeft.getY() + j * spacingY, 60, 60, "enemy",
+                                    (int)topLeft.getY() + j * spacingY, 60, 60,
                                     "bigInvader.png",
                                     controller.getBigInvaderSpeed(),
                                     controller.getEnemyBulletSpeed(),
@@ -130,7 +130,7 @@ public class GameManager {
                             invader = getRandomSmallInvader(
                                 (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                (int)topLeft.getY() + j * spacingY, 30, 30,
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -139,7 +139,7 @@ public class GameManager {
                             invader = getRandomMediumInvader(
                                 (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
+                                (int)topLeft.getY() + j * spacingY, 30, 30,
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -162,18 +162,18 @@ public class GameManager {
         }
     }
     
-    public Invader getRandomSmallInvader(int nSmall, int x, int y, int width, int height, String type, double speed, double bulletSpeed){
+    public Invader getRandomSmallInvader(int nSmall, int x, int y, int width, int height, double speed, double bulletSpeed){
         return switch (nSmall) {
-            case 0 -> new SmallInvader1(x, y, width, height, type, "smallInvader1.png", speed, bulletSpeed);
-            case 1 -> new SmallInvader2(x, y, width, height, type, "smallInvader2.png", speed, bulletSpeed);
+            case 0 -> new SmallInvader1(x, y, width, height, "smallInvader1.png", speed, bulletSpeed);
+            case 1 -> new SmallInvader2(x, y, width, height, "smallInvader2.png", speed, bulletSpeed);
             default -> null;
         };
     }
     
-    public Invader getRandomMediumInvader(int nSmall, int x, int y, int width, int height, String type, double speed, double bulletSpeed){
+    public Invader getRandomMediumInvader(int nSmall, int x, int y, int width, int height, double speed, double bulletSpeed){
         return switch (nSmall) {
-            case 0 -> new MediumInvader1(x, y, width, height, type, "mediumInvader1.png", speed, bulletSpeed);
-            case 1 -> new MediumInvader2(x, y, width, height, type, "mediumInvader2.png", speed, bulletSpeed);
+            case 0 -> new MediumInvader1(x, y, width, height, "mediumInvader1.png", speed, bulletSpeed);
+            case 1 -> new MediumInvader2(x, y, width, height, "mediumInvader2.png", speed, bulletSpeed);
             default -> null;
         };
     }

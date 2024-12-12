@@ -11,14 +11,30 @@ import java.util.Random;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
+/**
+ * Medium Invader #2: Moves either to the side or down, once it reached a certain point, it moves up
+ * Shoots bullets in a plus (+) or cross (x) or 8-star formation, 
+ * but smaller bullets and faster cooldown than Medium Invader #1
+ * @author Le Tuan Huy Nguyen
+ */
 public class MediumInvader2 extends Invader {
     
     private boolean movingUp = false;
     
     private String laserString = "bulletMedium.png";
 
-    public MediumInvader2(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
-        super(x, y, width, height, type, imagePath, speed, bulletSpeed);
+    /**
+     * Constructor for MediumInvader2
+     * @param x
+     * @param y
+     * @param width
+     * @param height
+     * @param imagePath
+     * @param speed
+     * @param bulletSpeed 
+     */
+    public MediumInvader2(int x, int y, int width, int height, String imagePath, double speed, double bulletSpeed) {
+        super(x, y, width, height, imagePath, speed, bulletSpeed);
         setFiringCooldown(3);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);
