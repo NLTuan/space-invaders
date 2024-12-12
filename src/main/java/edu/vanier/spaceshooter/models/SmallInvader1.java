@@ -16,7 +16,7 @@ public class SmallInvader1 extends Invader{
     
     public SmallInvader1(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        setFiringCooldown(5);
+        setFiringCooldown(3);
         setMovementCooldown(2);
         setPauseCooldown(0.8);
         setHitpoints(2);

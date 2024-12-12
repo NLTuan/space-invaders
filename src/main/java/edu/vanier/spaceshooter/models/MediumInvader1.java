@@ -22,8 +22,8 @@ public class MediumInvader1 extends Invader {
         setFiringCooldown(3);
         setMovementCooldown(0.2);
         setPauseCooldown(0.01);
-        setHitpoints(6);
-        setHpMax(6);
+        setHitpoints(5);
+        setHpMax(5);
         
         setDeltaClock(Math.random() * 3);
     }

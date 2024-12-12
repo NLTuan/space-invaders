@@ -19,8 +19,6 @@ public abstract class Invader extends FiringSprite {
     
     public Invader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
-        // Ensure that enemies have an initial down direction so they dont walk up and out of the screem
-//        setDirection(new Vector(0, 1)); 
         hpBar = new HpBar(this);
         
     }
@@ -32,9 +30,9 @@ public abstract class Invader extends FiringSprite {
     }
     
     public void speedMultiplier(double mult){
-        setSpeed(getSpeed() * mult);
-        movementCooldown /= mult;
-        pauseCooldown /= mult;
+        setSpeed(getSpeed() * (1 + mult));
+        movementCooldown /= (1 + mult);
+        pauseCooldown /= (1 + mult);
     }
     
     public void firingCooldownMult(double mult){
