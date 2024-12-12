@@ -43,6 +43,7 @@ public class MainAppFXMLController {
     private double totalElapsedTime;
     
     private ArrayList<KeyCode> input;
+    private ArrayList<KeyCode> prevInput;
 
     private double playerSpeed = 400;
     private double smallInvaderSpeed = 50;
@@ -182,6 +183,8 @@ public class MainAppFXMLController {
             stageText.setText("Stage " + gameManager.getLevel());
             livesText.setText("Lives: " + spaceShip.getLives());
             scoreText.setText("Score: " + gameManager.getScore());
+            bgImage.setImage(new Image(getClass().getResource("/bgimages/dueling_stars.png").toExternalForm()));
+
             
             AudioPlayer levelUpTune = new AudioPlayer("/sfx/levelUp.wav");
             levelUpTune.play();
@@ -224,11 +227,7 @@ public class MainAppFXMLController {
         
         mainScene.setOnKeyReleased((KeyEvent e) -> {
             KeyCode code = e.getCode();
-            if (input.contains(code)){
-                weaponSwitchPressed = false;
-            }
             input.remove(code);
-
         });
     }
 
@@ -276,12 +275,16 @@ public class MainAppFXMLController {
         
         // Actions to be performed during each frame of the animation.
 
-        if(input.contains(KeyCode.E) && !weaponSwitchPressed){
+        if(input.contains(KeyCode.E) && !prevInput.contains(KeyCode.E)){
             spaceShip.updateStage();
-            weaponSwitchPressed = true;
             AudioPlayer weaponChange = new AudioPlayer("/sfx/changeWeapon.wav");
             weaponChange.play();
         }
+        if(input.contains(KeyCode.L) && !prevInput.contains(KeyCode.L)){
+            spaceShip.toggleCrazyMode();
+            livesText.setText("Lives: " + spaceShip.getLives());
+        }
+        
         Vector direction = new Vector(
             boolToDouble(input.contains(KeyCode.D)) - boolToDouble(input.contains(KeyCode.A)),
             boolToDouble(input.contains(KeyCode.S)) - boolToDouble(input.contains(KeyCode.W))
@@ -319,15 +322,16 @@ public class MainAppFXMLController {
                 AudioPlayer levelUpTune = new AudioPlayer("/sfx/levelUp.wav");
                 levelUpTune.play();
                 
-                switch (gameManager.getLevel()) {
+                switch (gameManager.getLevel() % 3) {
                     case 1:
                         bgImage.setImage(new Image(getClass().getResource("/bgimages/dueling_stars.png").toExternalForm()));
+                        spaceShip.setImage(new Image(getClass().getResource("/spriteimages/playerShip1.png").toExternalForm()));
                         break;
                     case 2:
                         bgImage.setImage(new Image(getClass().getResource("/bgimages/Starset.png").toExternalForm()));
                         spaceShip.setImage(new Image(getClass().getResource("/spriteimages/playerShip2.png").toExternalForm()));
                         break;
-                    default:
+                    case 0:
                         bgImage.setImage(new Image(getClass().getResource("/bgimages/Starsetcolorful.png").toExternalForm()));
                         spaceShip.setImage(new Image(getClass().getResource("/spriteimages/playerShip3.png").toExternalForm()));
                         break;
@@ -347,7 +351,8 @@ public class MainAppFXMLController {
         }
         
         lastNanoTime = System.nanoTime();
-
+            
+        prevInput = new ArrayList<>(input);
     }
 
     private void processSprite(Sprite sprite) {
@@ -403,10 +408,10 @@ public class MainAppFXMLController {
                     if (((Invader) enemy).getHitpoints() == 0){
                         enemy.setDead(true);
                         ((Invader) enemy).getHpBar().setDead(true);
-                        if(enemy instanceof SmallInvader){
+                        if(enemy instanceof SmallInvader1){
                             gameManager.increaseScore(200);
                         }
-                        else if(enemy instanceof MediumInvader){
+                        else if(enemy instanceof MediumInvader1){
                             gameManager.increaseScore(400);
                         }
                         else if(enemy instanceof BigInvader){
@@ -474,10 +479,10 @@ public class MainAppFXMLController {
                     if (((Invader) enemy).getHitpoints() == 0){
                         enemy.setDead(true);
                         ((Invader) enemy).getHpBar().setDead(true);
-                        if(enemy instanceof SmallInvader){
+                        if(enemy instanceof SmallInvader1){
                             gameManager.increaseScore(200);
                         }
-                        else if(enemy instanceof MediumInvader){
+                        else if(enemy instanceof MediumInvader1){
                             gameManager.increaseScore(400);
                         }
                         else if(enemy instanceof BigInvader){

@@ -18,6 +18,8 @@ public class Player extends FiringSprite{
     private String laserString = "playerLaser.png";
     
     private int lives = 5;
+    
+    private boolean crazyMode; 
 
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
@@ -45,7 +47,7 @@ public class Player extends FiringSprite{
         ArrayList<Sprite> bullets = new ArrayList<>();
         switch (stage) {
             case 1 -> {
-                setFiringCooldown(0.01);
+                setFiringCooldown(0.1);
                 bullets.add(new Sprite(
                         (int) (getTranslateX() + getFitWidth()/2 - (double) width /2),
                         (int) getTranslateY(),
@@ -58,7 +60,7 @@ public class Player extends FiringSprite{
                 );
             }
             case 2 -> {
-                setFiringCooldown(0.01);
+                setFiringCooldown(0.3);
                 for (double i = -0.25; i < 0.26; i+=0.25) {
                     bullets.add(new Sprite(
                             (int) (getTranslateX() + getFitWidth()/3 - (double) width/2),
@@ -71,7 +73,7 @@ public class Player extends FiringSprite{
                 }
             }
             case 3 -> {
-                setFiringCooldown(1);
+                setFiringCooldown(0.8);
                 for (double i = -1; i < 1.1; i+=0.50) {
                     for (double j = -1; j < 1.1; j+=0.50) {
                         if (i == 0 && j==0) {
@@ -90,9 +92,23 @@ public class Player extends FiringSprite{
                 }
             }
         }
+        
+        if (crazyMode){
+            setFiringCooldown(0.02);
+        }
         return bullets;
     }
 
+    public void toggleCrazyMode(){
+        crazyMode = !crazyMode;
+        if (crazyMode){
+            lives += 50000;
+        }
+        else{
+            lives = 5;
+        }
+    }
+    
     public void levelUp(){
         if(maxStage < 3){
             maxStage += 1;

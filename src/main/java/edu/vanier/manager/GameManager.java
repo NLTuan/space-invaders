@@ -9,9 +9,12 @@ import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import edu.vanier.spaceshooter.models.BigInvader;
 import edu.vanier.spaceshooter.models.Invader;
-import edu.vanier.spaceshooter.models.MediumInvader;
-import edu.vanier.spaceshooter.models.SmallInvader;
+import edu.vanier.spaceshooter.models.MediumInvader1;
+import edu.vanier.spaceshooter.models.MediumInvader2;
+import edu.vanier.spaceshooter.models.SmallInvader1;
+import edu.vanier.spaceshooter.models.SmallInvader2;
 import edu.vanier.spaceshooter.models.Sprite;
+import java.util.Random;
 import javafx.scene.layout.Pane;
 
 /**
@@ -36,22 +39,28 @@ public class GameManager {
     public void spawnInvaders(){
         int enemiesPerRow;
         int numOfRows;
-        switch (level){
+        switch (level % 3){
             case 1 -> {
-                enemiesPerRow = 5;
+                enemiesPerRow = 7;
                 numOfRows = 3;
                 int spacingX = (int)animPane.getWidth()/enemiesPerRow;
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
                 Vector topLeft = new Vector(spacingX/2, spacingY/2);
                 for(int j = 0; j < numOfRows; j++){
                     for (int i = 0; i < enemiesPerRow; i++) {
-                        Invader invader = new SmallInvader(
+                        
+                        Invader invader = getRandomSmallInvader(
+                                (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                "smallInvader.png",
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                         );
+                        
+                        if (level > 3){
+                            invader.speedMultiplier((level - 3) * 0.2);
+                            invader.firingCooldownMult((level - 3) * 0.2);
+                        }
                         animPane.getChildren().add(invader);
                         animPane.getChildren().add(invader.getHpBar());
                     }
@@ -67,41 +76,45 @@ public class GameManager {
                     for (int i = 0; i < enemiesPerRow; i++) {
                         Invader invader;
                         if((i+j) % 2 == 0){
-                            invader = new SmallInvader(
+                            invader = getRandomSmallInvader(
+                                (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                "smallInvader.png",
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
                         }
                         else{
-                            invader = new MediumInvader(
+                            invader = getRandomMediumInvader(
+                                (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                "mediumInvader.png",
-                                controller.getMediumInvaderSpeed(),
+                                controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
                         }
 
+                        if (level > 3){
+                            invader.speedMultiplier((level - 3) * 0.2);
+                            invader.firingCooldownMult((level - 3) * 0.2);
+                        }
                         animPane.getChildren().add(invader);
                         animPane.getChildren().add(invader.getHpBar());
                     }
                 }
                
             }
-            default -> {
-                enemiesPerRow = (level * 2) + 1;
+            case 0 -> {
+                enemiesPerRow = ((level/3) * 2) + 5;
                 numOfRows = 3;
-                int spacingX = (int)animPane.getWidth()/enemiesPerRow;
+                int spacingX = (int)(animPane.getWidth() /enemiesPerRow);
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
                 Vector topLeft = new Vector(spacingX/2, spacingY/2);
                 for(int j = 0; j < numOfRows; j++){
                     for (int i = 0; i < enemiesPerRow; i++) {
                         Invader invader = null;
                         if (j == 0){
-                            if (i % 7 == 3){
+                            if (i == (enemiesPerRow / 2)){
                                 invader = new BigInvader(
                                     (int)topLeft.getX() + i * spacingX,
                                     (int)topLeft.getY() + j * spacingY, 60, 60, "enemy",
@@ -114,24 +127,29 @@ public class GameManager {
                             }
                         }
                         else if (j == 1){
-                            invader = new SmallInvader(
+                            invader = getRandomSmallInvader(
+                                (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                "smallInvader.png",
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
                         }
                         else{
-                            invader = new MediumInvader(
+                            invader = getRandomMediumInvader(
+                                (int)Math.round(Math.random()), 
                                 (int)topLeft.getX() + i * spacingX,
                                 (int)topLeft.getY() + j * spacingY, 30, 30, "enemy",
-                                "mediumInvader.png",
-                                controller.getMediumInvaderSpeed(),
+                                controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
                         }
                         if (invader != null){
+                            if (level > 3){
+                                invader.speedMultiplier((level - 3) * 0.2);
+                                invader.firingCooldownMult((level - 3) * 0.2);
+                            }
+                            
                             animPane.getChildren().add(invader);
                             animPane.getChildren().add(invader.getHpBar());
                         }
@@ -139,9 +157,27 @@ public class GameManager {
                 }
             }
 
+
+
         }
     }
-
+    
+    public Invader getRandomSmallInvader(int nSmall, int x, int y, int width, int height, String type, double speed, double bulletSpeed){
+        return switch (nSmall) {
+            case 0 -> new SmallInvader1(x, y, width, height, type, "smallInvader1.png", speed, bulletSpeed);
+            case 1 -> new SmallInvader2(x, y, width, height, type, "smallInvader2.png", speed, bulletSpeed);
+            default -> null;
+        };
+    }
+    
+    public Invader getRandomMediumInvader(int nSmall, int x, int y, int width, int height, String type, double speed, double bulletSpeed){
+        return switch (nSmall) {
+            case 0 -> new MediumInvader1(x, y, width, height, type, "mediumInvader1.png", speed, bulletSpeed);
+            case 1 -> new MediumInvader2(x, y, width, height, type, "mediumInvader2.png", speed, bulletSpeed);
+            default -> null;
+        };
+    }
+    
     public int getLevel() {
         return level;
     }

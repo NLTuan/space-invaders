@@ -11,13 +11,13 @@ import java.util.Random;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class MediumInvader extends Invader {
+public class MediumInvader2 extends Invader {
     
     private boolean movingUp = false;
     
     private String laserString = "bulletMedium.png";
 
-    public MediumInvader(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
+    public MediumInvader2(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
         setFiringCooldown(3);
         setMovementCooldown(0.2);
@@ -33,8 +33,8 @@ public class MediumInvader extends Invader {
         AudioPlayer mediumLaserTune = new AudioPlayer("/sfx/mediumInvaderLaser.wav");
         mediumLaserTune.play();
         
-        int width = 100;
-        int height = 25;
+        int width = 30;
+        int height = 10;
         ArrayList<Sprite> bullets = new ArrayList<>();
         
         Random random = new Random();
