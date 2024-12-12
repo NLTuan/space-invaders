@@ -1,21 +1,24 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.spaceshooter.models;
 
-import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
 /**
- *
- * @author letua
+ * Class for regulating explosion effects. Keep track of when the explosion animation
+ * ends and clears itself from the screen by the MainFXMLController 
+ * removeDeadSprites() method.
+ * @author 
  */
 public class Explosion extends ImageView {
     private double timeLeft;
     double scale = 4;
     
+    /**
+     * Constructor for Explosion, used for exploding Invaders.
+     * @param sprite the exploding sprite
+     * @param path the path of the animation gif
+     * @param duration the duration of the explosion gif
+     */
     public Explosion(Sprite sprite, String path, double duration) {
         timeLeft = duration;
         double w = sprite.getFitWidth();
@@ -28,6 +31,14 @@ public class Explosion extends ImageView {
         setFitHeight(h * scale);
     }
     
+    /**
+     * Constructor for Explosion, used for exploding bullets
+     * @param sprite the exploding sprite
+     * @param w the width of the explosion
+     * @param h the height of the explosion
+     * @param path the path of the animation gif
+     * @param duration the duration of the explosion gif
+     */
     public Explosion(Sprite sprite, double w, double h, String path, double duration) {
         timeLeft = duration;
         
@@ -38,6 +49,10 @@ public class Explosion extends ImageView {
         setFitHeight(h);
     }
 
+    /**
+     * Quick method for reducing the life left of the animation
+     * @param elapsedTime the time passed since last frame
+     */
     public void decreaseTime(double elapsedTime){
         timeLeft -= elapsedTime;
     }

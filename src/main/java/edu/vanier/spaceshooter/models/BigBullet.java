@@ -5,8 +5,6 @@
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
-import edu.vanier.spaceshooter.SpaceShooterApp;
-import javafx.scene.paint.Color;
 
 /**
  * Sprite class for the bullet shot by the BigInvader (boss)

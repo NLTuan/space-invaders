@@ -7,7 +7,6 @@ import edu.vanier.spaceshooter.SpaceShooterApp;
 import edu.vanier.spaceshooter.models.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import javafx.animation.AnimationTimer;
@@ -29,6 +28,11 @@ import org.slf4j.LoggerFactory;
 
 /**
  * FXML Controller class of the MainApp UI.
+ * Controls the flow of the game and also the UI components
+ * Handles animation and updates UI components accordingly
+ * @param primaryStage the primary Stage
+ * @author Le Tuan Huy Nguyen
+ * 
  */
 public class MainAppFXMLController {
 
@@ -56,8 +60,6 @@ public class MainAppFXMLController {
 
     private int windowWidth = 600;
     private int windowHeight = 900;
-    
-    private boolean weaponSwitchPressed = false;
     
     private GameManager gameManager;
 
@@ -134,6 +136,7 @@ public class MainAppFXMLController {
     public void initialize() {
         logger.info("Initializing MainAppController...");
         
+        // Create Player
         spaceShip = new Player(
                 SpaceShooterApp.screenWidth/2, 
                 (int)(SpaceShooterApp.screenHeight * 0.75), 20, 20, "player", "playerShip1.png", playerSpeed, playerBulletSpeed);
@@ -141,8 +144,11 @@ public class MainAppFXMLController {
         
         input = new ArrayList<>();
         
+        // Create game state
         gameManager = new GameManager(this, animationPanel);
         livesText.setText("Lives: " + spaceShip.getLives());
+        
+        // Bind the components to allow resizing of the screen
         tipHBox.prefWidthProperty().bind(animationPanel.widthProperty());
         bgImage.fitWidthProperty().bind(animationPanel.widthProperty());
         bgImage.fitHeightProperty().bind(animationPanel.heightProperty());
@@ -152,9 +158,12 @@ public class MainAppFXMLController {
         
         gameCompleteVBox.prefWidthProperty().bind(animationPanel.widthProperty());
         gameCompleteVBox.prefHeightProperty().bind(animationPanel.heightProperty());
-
     }
 
+    /**
+     * Initializes the animation loop, key press handlers, and add behavior to buttons
+     * @author Le Tuan Huy Nguyen
+     */
     public void setupGameWorld() {
         initGameLoop();
         setupKeyPressHandlers();
@@ -220,6 +229,9 @@ public class MainAppFXMLController {
         }));
     }
 
+    /**
+     * Starts an AnimationTimer loop
+     */
     private void initGameLoop() {
         // Create the game loop.
         gameLoop = new AnimationTimer() {
@@ -239,7 +251,11 @@ public class MainAppFXMLController {
      * <ul>
      * <li>Pressing 'A' moves the spaceship to the left.</li>
      * <li>Pressing 'D' moves the spaceship to the right.</li>
+     * <li>Pressing 'W' moves the spaceship upwards.</li>
+     * <li>Pressing 'S' moves the spaceship downwards.</li>
      * <li>Pressing the SPACE key triggers the spaceship to shoot.</li>
+     * <li>Pressing 'E' switches the spaceship's weapon.</li>
+     * <li>Pressing 'L' activates crazy mode.</li>
      * </ul>
      * </p>
      */
@@ -278,6 +294,9 @@ public class MainAppFXMLController {
         return spriteList;
     }
     
+    /**
+     * Updates the state of the explosions to know when they have to be removed
+     */
     private void updateExplosions() {
         for (Node n : animationPanel.getChildren()) {
             if (n instanceof Explosion) {
@@ -300,8 +319,10 @@ public class MainAppFXMLController {
         elapsedTime = (now - lastNanoTime) / 1E9;
         totalElapsedTime += elapsedTime;
         
+        // fetch the time for smooth animation;
+        lastNanoTime = System.nanoTime();
+        
         // Actions to be performed during each frame of the animation.
-
         if(input.contains(KeyCode.E) && !prevInput.contains(KeyCode.E)){
             spaceShip.updateStage();
             AudioPlayer weaponChange = new AudioPlayer("/sfx/changeWeapon.wav");
@@ -312,22 +333,27 @@ public class MainAppFXMLController {
             livesText.setText("Lives: " + spaceShip.getLives());
         }
         
+        // Update player direction
         Vector direction = new Vector(
             boolToDouble(input.contains(KeyCode.D)) - boolToDouble(input.contains(KeyCode.A)),
             boolToDouble(input.contains(KeyCode.S)) - boolToDouble(input.contains(KeyCode.W))
         ).normalized();
-        
         spaceShip.setDirection(direction);
         
+        // Process the sprites
         getSprites().forEach(this::processSprite);
         
+        // Update the state of the explosions
         updateExplosions();
 
+        // Clear dead sprites
         removeDeadSprites();
         
+        // Update constants in case the screen has been resized
         SpaceShooterApp.screenWidth = (int)animationPanel.getWidth();
         SpaceShooterApp.screenHeight = (int)animationPanel.getHeight();
         
+        // Check if enemies are cleared and level up should happen
         boolean levelUp = true;
         for (Node sprite: animationPanel.getChildren()){
             if(sprite instanceof Invader){
@@ -336,13 +362,16 @@ public class MainAppFXMLController {
             }
         }
         
+        // Perform leveling up 
         if(levelUp && !gameManager.isGameOver()){
             
             if (gameManager.getLevel() == 3){
+                // Check if player completed level 3, which prompts a game complete screen
                 gameManager.setGameOver(true);
             }
 
             if (!gameManager.isGameOver()){
+                // Leveling up
                 gameManager.levelUp();
                 spaceShip.levelUp();
                 stageText.setText("Stage: " + gameManager.getLevel());
@@ -368,20 +397,27 @@ public class MainAppFXMLController {
                 }
             }
         }
-        else if (gameManager.isGameOver() && spaceShip.getLives() > 0){
+        if (gameManager.isGameOver() && spaceShip.getLives() > 0){
+            // Prompt game complete screen
             gameComplete();
             gameLoop.stop();
         }
         else if (gameManager.isGameOver()){
+            // Prompt game over screen when player dies
             gameOver();
             gameLoop.stop();
         }
         
-        lastNanoTime = System.nanoTime();
-            
+        
+        // save last frame's inputs to allow checking if a button was clicked in the last frame
         prevInput = new ArrayList<>(input);
     }
 
+    /**
+     * Handle each sprite's behavior on each frame. This method takes care of
+     * updating collision, movement, shooting, and internal clocks.
+     * @param sprite the sprite to process
+     */
     private void processSprite(Sprite sprite) {
         switch (sprite.getType()) {
             case "player":
@@ -405,6 +441,12 @@ public class MainAppFXMLController {
         }
     }
     
+    /**
+     * Handle the player's spaceship, it checks for collision with enemy bullets,
+     * and enemies. It also handles removing player lives and raising gameOver
+     * whenever a player dies.
+     * @param sprite 
+     */
     private void handlePlayer(Sprite sprite){
         Player playerSprite = (Player) sprite;
         playerSprite.setInternalShootingClock(playerSprite.getInternalShootingClock() + elapsedTime);
@@ -418,22 +460,24 @@ public class MainAppFXMLController {
 
                     // Handle player after collision with enemy
                     if (playerSprite.getLives() > 1){
+                        // Player doesn't die
                         playerSprite.setLives(playerSprite.getLives() - 1);
-                        
                         livesText.setText("Lives: " + playerSprite.getLives());
                         AudioPlayer damage = new AudioPlayer("/sfx/damage.mp3");
                         damage.play();
                     }
                     else{
+                        // Player dies
                         playerSprite.setLives(0);
                         livesText.setText("Lives: " + playerSprite.getLives());
                         playerSprite.setDead(true);
-                        
                         gameManager.setGameOver(true); // Terminate game
                     }
                     // Handle enemy after collision
                     if (((Invader) enemy).getHitpoints() == 0){
                         enemy.setDead(true);
+                        
+                        // Increase the score after killing an enemy by colliding into them
                         ((Invader) enemy).getHpBar().setDead(true);
                         if(enemy instanceof SmallInvader1){
                             gameManager.increaseScore(200);
@@ -458,6 +502,11 @@ public class MainAppFXMLController {
             }
         }
     }
+    /**
+     * Process enemy bullets movement and collision with the player. It removes
+     * lives or raises gameOver when the player is hit.
+     * @param sprite the bullet Sprite to process
+     */
     private void handleEnemyBullet(Sprite sprite) {
         if(sprite instanceof BigBullet){
             ((BigBullet)sprite).updateDirection();
@@ -466,7 +515,13 @@ public class MainAppFXMLController {
         sprite.move(elapsedTime);
         // Check for collision with the spaceship
         if (sprite.getBoundsInParent().intersects(spaceShip.getBoundsInParent())) {
+            Explosion explosionBullet = new Explosion(sprite, sprite.getFitWidth() * 2,
+                    sprite.getFitWidth() * 2,
+                    "/animations/explosionBullet.gif", 0.6);
+            animationPanel.getChildren().add(explosionBullet); 
+
             if (spaceShip.getLives() > 1){
+                // Player doesn't die
                 sprite.setDead(true);
                 spaceShip.setLives(spaceShip.getLives() - 1);
                 livesText.setText("Lives: " + spaceShip.getLives());
@@ -474,6 +529,7 @@ public class MainAppFXMLController {
                 damage.play();
             }
             else{
+                // Player dies
                 spaceShip.setLives(spaceShip.getLives() - 1);
                 livesText.setText("Lives: " + spaceShip.getLives());
                 spaceShip.setDead(true);
@@ -488,13 +544,20 @@ public class MainAppFXMLController {
         }
     }
 
+    /**
+     * Manage the player's bullet's collision with the enemy, either taking away
+     * their hp or killing them once it collides.
+     * @param sprite the player's bullet sprite
+     */
     private void handlePlayerBullet(Sprite sprite) {
         sprite.move(elapsedTime);
         for (Sprite enemy : getSprites()) {
             if (enemy instanceof Invader) {
                 // Check for collision with an enemy
                 if (sprite.getBoundsInParent().intersects(enemy.getBoundsInParent())) {
+                    // Remove HP
                     ((Invader) enemy).setHitpoints(((Invader) enemy).getHitpoints() - 1);
+                    
                     AudioPlayer enemyHit = new AudioPlayer("/sfx/enemyHit.mp3");
                     enemyHit.setVolume(0.5);
                     enemyHit.play();
@@ -503,7 +566,9 @@ public class MainAppFXMLController {
                             sprite.getFitHeight() * 4,
                             "/animations/explosionBullet.gif", 0.6);
                     animationPanel.getChildren().add(explosionBullet);
+                    
                     if (((Invader) enemy).getHitpoints() == 0){
+                        // Enemy is dead after collision
                         enemy.setDead(true);
                         ((Invader) enemy).getHpBar().setDead(true);
                         if(enemy instanceof SmallInvader1){
@@ -525,13 +590,18 @@ public class MainAppFXMLController {
                         enemyDeath.play();
                     }
                     sprite.setDead(true);
-                    
-
                 }
             }
         }
     }
 
+    /** 
+     * Determines if the enemy fires in a certain frame
+     * The enemy must check if their shot is still on cooldown, and once it's
+     * down, they have a 30% chance of shooting. Shoot or not, they will still
+     * have to undergo cooldown again.
+     * @param sprite the sprite that performs the shooting
+     */
     private void handleEnemyFiring(Sprite sprite) {
         Invader invader = (Invader) sprite;
         if ((totalElapsedTime + invader.getDeltaClock()) % invader.getFiringCooldown() < 0.01) {
@@ -541,6 +611,13 @@ public class MainAppFXMLController {
         }
     }
     
+    /**
+     * Handles player shooting depending on if the player is on cooldown. The
+     * player should SPACE to shoot. After a player shoots, they are in cooldown
+     * which must run up before the player can shoot again.
+     * Also decreases the score by 10 on each shot for penalty.
+     * @param sprite 
+     */
     private void handlePlayerFiring(Sprite sprite) {
         Player player = (Player) sprite;
         if (player.getInternalShootingClock() >= player.getFiringCooldown()) {
@@ -553,6 +630,11 @@ public class MainAppFXMLController {
         }
     }
 
+    /**
+     * Handles enemy movement and HP bar. Determines whether the enemy is in a 
+     * paused state or moving state and moves it accordingly
+     * @param sprite the enemy to be updated
+     */
     private void handleEnemy(Sprite sprite) {
         sprite.move(elapsedTime);
         Invader invader = (Invader) sprite;
@@ -578,7 +660,7 @@ public class MainAppFXMLController {
     }
 
     /**
-     * Removes all dead sprites from the animation panel.
+     * Removes all dead sprites, HpBars, and Explosions from the animation panel.
      * <p>
      * This method iterates through the children of the animation panel and
      * removes any sprite that is marked as dead. It utilizes a lambda
@@ -622,20 +704,29 @@ public class MainAppFXMLController {
         }
     }
 
-    public void setScene(Scene scene) {
-        mainScene = scene;
-    }
-
     public void stopAnimation() {
         if (gameLoop != null) {
             gameLoop.stop();
         }
     }
     
-    public static double boolToDouble(boolean bool){
+    /**
+     * Helper method for converting boolean to a double. It helps for determining
+     * direction from input
+     * @param bool the boolean to convert
+     * @return 1.0 if true, 0.0 if false
+     */
+    private static double boolToDouble(boolean bool){
         return (bool)? 1.0: 0;
     }
     
+    /**
+     * Check if a sprite is out of bounds (the playing window) and sets them 
+     * to dead=true for removal.This method should apply only to bullets, other 
+     * sprites should not be going outside of the bounds.
+     * @param sprite the sprite that needs to be checked, must be a bullet usually
+     * @return true if the sprite is out of bounds, false if not
+     */
     private boolean outOfBounds(Sprite sprite){
         double tolerance = 20;
         if ((sprite.getTranslateX() + sprite.getFitWidth() < -tolerance
@@ -648,6 +739,50 @@ public class MainAppFXMLController {
         }
         return false;
 
+    }
+    
+        /**
+     * Raises the game over screen and prompts the player to replay or quit
+     */
+    private void gameOver() {
+        AudioPlayer gameOverTune = new AudioPlayer("/sfx/gameOver.wav");
+        gameOverTune.play();
+        
+        gameOverVBox.setViewOrder(-1);
+        gameCompleteVBox.setViewOrder(0);
+        input.removeAll(input);
+        gameOverVBox.setOpacity(1);
+        replayButton.setDisable(false);
+        gameOverQuitButton.setDisable(false);
+        gameOverScoreText.setText("Final score: " + gameManager.getScore());
+        
+        // Clear out the game elements
+        animationPanel.getChildren().removeIf((t) -> {
+            return (t instanceof Sprite || t instanceof HpBar || t instanceof Explosion);
+        });
+    }
+    
+    /**
+     * After completing level 3, this method is called to raise a victory screen,
+     * where the player can continue to play harder levels, restart, or quit.
+     */
+    private void gameComplete(){
+        AudioPlayer victory = new AudioPlayer("/sfx/victory.mp3");
+        victory.play();
+        
+        gameCompleteVBox.setViewOrder(-1);
+        gameOverVBox.setViewOrder(0);
+        input.removeAll(input);
+        gameCompleteVBox.setOpacity(1);
+        replayButtonComplete.setDisable(false);
+        winQuitButton.setDisable(false);
+        continueButton.setDisable(false);
+        gameCompleteScoreText.setText("Score: " + gameManager.getScore());
+        
+        // Clear out the game elements
+        animationPanel.getChildren().removeIf((t) -> {
+            return (t instanceof Sprite || t instanceof HpBar || t instanceof Explosion);
+        });
     }
 
     public Player getSpaceShip() {
@@ -712,41 +847,5 @@ public class MainAppFXMLController {
 
     public void setMainScene(Scene mainScene) {
         this.mainScene = mainScene;
-    }
-
-    private void gameOver() {
-        AudioPlayer gameOverTune = new AudioPlayer("/sfx/gameOver.wav");
-        gameOverTune.play();
-        
-        gameOverVBox.setViewOrder(-1);
-        gameCompleteVBox.setViewOrder(0);
-        input.removeAll(input);
-        gameOverVBox.setOpacity(1);
-        replayButton.setDisable(false);
-        gameOverQuitButton.setDisable(false);
-        gameOverScoreText.setText("Final score: " + gameManager.getScore());
-        
-        animationPanel.getChildren().removeIf((t) -> {
-            return (t instanceof Sprite || t instanceof HpBar || t instanceof Explosion);
-        });
-    }
-    
-    private void gameComplete(){
-        AudioPlayer victory = new AudioPlayer("/sfx/victory.mp3");
-        victory.play();
-        
-        gameCompleteVBox.setViewOrder(-1);
-        gameOverVBox.setViewOrder(0);
-        input.removeAll(input);
-        gameCompleteVBox.setOpacity(1);
-        replayButtonComplete.setDisable(false);
-        winQuitButton.setDisable(false);
-        continueButton.setDisable(false);
-        gameCompleteScoreText.setText("Score: " + gameManager.getScore());
-        
-        
-        animationPanel.getChildren().removeIf((t) -> {
-            return (t instanceof Sprite || t instanceof HpBar || t instanceof Explosion);
-        });
     }
 }

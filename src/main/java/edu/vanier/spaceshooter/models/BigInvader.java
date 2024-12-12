@@ -29,10 +29,10 @@ public class BigInvader extends Invader{
     
     /**
      * Constructor for BigInvader
-     * @param x
-     * @param y
-     * @param width
-     * @param height
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
      * @param imagePath the path of the image sprite
      * @param speed the speed of the invader
      * @param bulletSpeed the bullet speed

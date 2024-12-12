@@ -2,13 +2,17 @@ package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
 import edu.vanier.helpers.AudioPlayer;
-import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
-import java.io.File;
-
 import java.util.ArrayList;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
+/**
+ * Class for handling the Player. The player is a FiringSprite which means it can
+ * shoot bullets. The player has internal levels which can be switched. 
+ * Each time it switches, the player uses another weapon. The player also has an 
+ * internal shooting clock which determines whether the player can shoot if it
+ * is higher than the cooldown.
+ * It also contains a crazy mode for extra fun :).
+ * @author Le Tuan Huy Nguyen
+ */
 public class Player extends FiringSprite{
     private int stage = 1;
     private int maxStage = 0;
@@ -21,10 +25,25 @@ public class Player extends FiringSprite{
     
     private boolean crazyMode; 
 
+    /**
+     * Constructor for the player
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
+     * @param type the type of the sprite as a string (enemy, bullet, player)
+     * @param imagePath the path of the image sprite
+     * @param speed the speed of the sprite
+     * @param bulletSpeed the speed of the bullet being shot
+     */
     public Player(int x, int y, int width, int height, String type, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, type, imagePath, speed, bulletSpeed);
     }
 
+    /**
+     * Switch the player's stage/weapon each time. Resets the stage to 1 if the
+     * current stage is at the max stage possible.
+     */
     public void updateStage(){
         if(maxStage == 1){return;}
         
@@ -36,6 +55,13 @@ public class Player extends FiringSprite{
         }
     }
 
+    /**
+     * Player's shoot method. It allows the player to shoot bullets depending on
+     * which level the player is at. Level 1 shoots a singular bullet but has a
+     * short cooldown. Level 2 shoots a burst of bullets with a longer cooldown.
+     * Level 3 shoots bullets around the player with a long cooldown.
+     * @return 
+     */
     public ArrayList<Sprite> shoot(){
         
         AudioPlayer laserTune = new AudioPlayer("/sfx/playerLaser.wav");
@@ -99,6 +125,9 @@ public class Player extends FiringSprite{
         return bullets;
     }
 
+    /**
+     * Toggle crazy mode.
+     */
     public void toggleCrazyMode(){
         crazyMode = !crazyMode;
         if (crazyMode){
@@ -109,6 +138,10 @@ public class Player extends FiringSprite{
         }
     }
     
+    /**
+     * Update the max level of the player whenever they complete a stage under
+     * stage 3. Allow them to use higher level weapons
+     */
     public void levelUp(){
         if(maxStage < 3){
             maxStage += 1;

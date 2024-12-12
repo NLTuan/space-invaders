@@ -20,13 +20,13 @@ public class MediumInvader1 extends Invader {
 
     /**
      * Constructor or MediumInvader1
-     * @param x
-     * @param y
-     * @param width
-     * @param height
-     * @param imagePath
-     * @param speed
-     * @param bulletSpeed 
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
+     * @param imagePath the path of the image sprite
+     * @param speed the speed of the invader
+     * @param bulletSpeed the bullet speed
      */
     public MediumInvader1(int x, int y, int width, int height, String imagePath, double speed, double bulletSpeed) {
         super(x, y, width, height, imagePath, speed, bulletSpeed);

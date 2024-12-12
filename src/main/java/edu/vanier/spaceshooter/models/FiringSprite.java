@@ -1,9 +1,12 @@
 package edu.vanier.spaceshooter.models;
 
-import javafx.scene.paint.Color;
-
 import java.util.ArrayList;
 
+/**
+ * The class that allows its child classes to shoot a bullet. It contains a bullet
+ * speed and a cooldown and a an abstract shoot method.
+ * @author letua
+ */
 public abstract class FiringSprite extends Sprite{
     private double bulletSpeed;
 

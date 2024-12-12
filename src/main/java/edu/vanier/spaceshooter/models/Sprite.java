@@ -5,6 +5,11 @@ import edu.vanier.spaceshooter.SpaceShooterApp;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
+/**
+ * The class that allows any image to move given a direction. It can be used for
+ * the player, enemy, or bullet.
+ * @author Le Tuan Huy Nguyen
+ */
 public class Sprite extends ImageView {
 
     private boolean dead = false;
@@ -14,6 +19,16 @@ public class Sprite extends ImageView {
     
     private Vector direction;
 
+    /**
+     * Constructor for sprite
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
+     * @param type the type of the sprite as a string (enemy, bullet, player)
+     * @param imagePath the path of the image sprite
+     * @param speed the speed of the sprite
+     */
     public Sprite(int x, int y, int width, int height, String type, String imagePath, double speed) {
         super();
         setImage(new Image(getClass().getResource("/spriteimages/" + imagePath).toExternalForm()));
@@ -28,6 +43,17 @@ public class Sprite extends ImageView {
         rotateBullet();
     }
 
+    /**
+     * Constructor for sprite with initial direction
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
+     * @param type the type of the sprite as a string (enemy, bullet, player)
+     * @param imagePath the path of the image sprite
+     * @param speed the speed of the sprite
+     * @param direction the initial direction of the sprite
+     */
     public Sprite(int x, int y, int width, int height, String type, String imagePath ,double speed, Vector direction) {
         super();
         setImage(new Image(getClass().getResource("/spriteimages/" + imagePath).toExternalForm()));
@@ -42,7 +68,13 @@ public class Sprite extends ImageView {
         rotateBullet();
     }
 
+    /**
+     * Moves a sprite by a certain amount in the sprite's direction given how
+     * much time has passed since the last frame.
+     * @param elapsedTime the amount of time passed since the last frame in seconds
+     */
     public void move(double elapsedTime){
+        // Movement
         Vector move = direction.scalarMultiply(speed).scalarMultiply(elapsedTime);
         Vector position = new Vector(getTranslateX(), getTranslateY());
         Vector finalPos = position.add(move);
@@ -70,6 +102,9 @@ public class Sprite extends ImageView {
         rotateBullet();
     }
     
+    /**
+     * Apply rotation on a bullet depending on their direction.
+     */
     private void rotateBullet(){
         // Handle bullet rotation
         if(getType().contains("bullet")){
@@ -111,6 +146,10 @@ public class Sprite extends ImageView {
         return direction;
     }
 
+    /**
+     * Setter for direction, normalizes the direction after it is being set
+     * @param direction the direction vector.
+     */
     public void setDirection(Vector direction) {
         this.direction = direction.normalized();
     }
