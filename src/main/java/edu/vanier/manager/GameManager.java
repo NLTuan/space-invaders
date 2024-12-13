@@ -41,7 +41,7 @@ public class GameManager {
         int numOfRows;
         switch (level % 3){
             case 1 -> {
-                enemiesPerRow = (level/3 + 2) + 5;
+                enemiesPerRow = level/3 + 5;
                 numOfRows = 3;
                 int spacingX = (int)animPane.getWidth()/enemiesPerRow;
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
@@ -73,7 +73,7 @@ public class GameManager {
                 }
             }
             case 2 -> {
-                enemiesPerRow = (level/3 + 2) + 3;
+                enemiesPerRow = level/3 + 4;
                 numOfRows = 5;
                 int spacingX = (int)animPane.getWidth()/enemiesPerRow;
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
@@ -118,7 +118,7 @@ public class GameManager {
                
             }
             case 0 -> {
-                enemiesPerRow = ((level/3) * 2) + 5;
+                enemiesPerRow = ((level/3) * 2) + 8;
                 numOfRows = 3;
                 int spacingX = (int)(animPane.getWidth() /enemiesPerRow);
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);

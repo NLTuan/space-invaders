@@ -721,9 +721,10 @@ public class MainAppFXMLController {
     
     /**
      * Check if a sprite is out of bounds (the playing window) and sets them 
-     * to dead=true for removal.This method should apply only to bullets, other 
-     * sprites should not be going outside of the bounds.
-     * @param sprite the sprite that needs to be checked, must be a bullet usually
+     * to dead=true for removal. This method only works for bullets objects 
+     * (which are Sprites with a type String that contains "bullet"). It does not
+     * work with other sprites, they shouldn't be deleted if they go off screen.
+     * @param sprite the sprite that needs to be checked, has to be a bullet
      * @return true if the sprite is out of bounds, false if not
      */
     private boolean outOfBounds(Sprite sprite){
