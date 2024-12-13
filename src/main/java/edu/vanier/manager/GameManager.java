@@ -1,41 +1,52 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.manager;
 
 import edu.vanier.geometry.Vector;
-import edu.vanier.spaceshooter.SpaceShooterApp;
-import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
+import edu.vanier.spaceshooter.controllers.MainGameController;
 import edu.vanier.spaceshooter.models.BigInvader;
 import edu.vanier.spaceshooter.models.Invader;
 import edu.vanier.spaceshooter.models.MediumInvader1;
 import edu.vanier.spaceshooter.models.MediumInvader2;
 import edu.vanier.spaceshooter.models.SmallInvader1;
 import edu.vanier.spaceshooter.models.SmallInvader2;
-import edu.vanier.spaceshooter.models.Sprite;
-import java.util.Random;
 import javafx.scene.layout.Pane;
 
 /**
- *
- * @author letua
+ * Game Manager for the space shooter game. Keeps track of the levels as well as
+ * the state of the game if it is over or not. Also has the ability to spawn in 
+ * enemies depending on which level it is on.
+ * @author Le Tuan Huy Nguyen
  */
 public class GameManager {
     private int level;
     
-    private MainAppFXMLController controller;
+    private MainGameController controller;
     private Pane animPane;
     private int score = 0;
     
     private boolean gameOver = false;
 
-    public GameManager(MainAppFXMLController controller, Pane animPane) {
+    /**
+     * Constructor for GameManager
+     * @param controller the main controller for the game
+     * @param animPane the root pane in which the game elements are placed
+     */
+    public GameManager(MainGameController controller, Pane animPane) {
         level = 0;
         this.controller = controller;
         this.animPane = animPane;
     }
     
+    /**
+     * Spawns invaders based on the level that it is on.
+     * If the level % 3 is  1 (repetitions of the first level), enemies are spawn
+     * in a 3 by (level/3 + 5) grid with slight random shifts.
+     * If the level % 3 is  2 (repetitions of the second level), enemies are spawn
+     * in a 4 by (level/3 + 4) grid with slight random shifts.
+     * If the level % 3 is  0 (repetitions of the third level), enemies are spawn
+     * in a 3 by (level/3 * 2) + 10 grid with the top row having the singular big
+     * invader at the center. The second row has small invaders, and the third row 
+     * will have medium invaders.
+     */
     public void spawnInvaders(){
         int enemiesPerRow;
         int numOfRows;
@@ -118,7 +129,7 @@ public class GameManager {
                
             }
             case 0 -> {
-                enemiesPerRow = ((level/3) * 2) + 8;
+                enemiesPerRow = ((level/3) * 2) + 10;
                 numOfRows = 3;
                 int spacingX = (int)(animPane.getWidth() /enemiesPerRow);
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
@@ -169,12 +180,21 @@ public class GameManager {
                     }
                 }
             }
-
-
-
         }
     }
     
+    /**
+     * Fetches a small invader on random chance. It can either be SmallInvader1
+     * or SmallInvader2
+     * @param nSmall values of 0 or 1, 0 for SmallInvader1 and 1 for SmallInvader2
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
+     * @param speed the speed of the invader
+     * @param bulletSpeed the bullet speed
+     * @return a random SmallInvader
+     */
     public Invader getRandomSmallInvader(int nSmall, int x, int y, int width, int height, double speed, double bulletSpeed){
         return switch (nSmall) {
             case 0 -> new SmallInvader1(x, y, width, height, "smallInvader1.png", speed, bulletSpeed);
@@ -183,6 +203,18 @@ public class GameManager {
         };
     }
     
+        /**
+     * Fetches a small invader on random chance. It can either be MediumInvader1
+     * or MediumInvader2
+     * @param nSmall values of 0 or 1, 0 for MediumInvader1 and 1 for MediumInvader2
+     * @param x the x position of the sprite
+     * @param y the y position of the sprite
+     * @param width the width of the sprite
+     * @param height the height of the sprite
+     * @param speed the speed of the invader
+     * @param bulletSpeed the bullet speed
+     * @return a random MediumInvader
+     */
     public Invader getRandomMediumInvader(int nSmall, int x, int y, int width, int height, double speed, double bulletSpeed){
         return switch (nSmall) {
             case 0 -> new MediumInvader1(x, y, width, height, "mediumInvader1.png", speed, bulletSpeed);

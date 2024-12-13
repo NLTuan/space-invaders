@@ -33,9 +33,9 @@ import org.slf4j.LoggerFactory;
  * 
  * @author Le Tuan Huy Nguyen
  */
-public class MainAppFXMLController {
+public class MainGameController {
 
-    private final static Logger logger = LoggerFactory.getLogger(MainAppFXMLController.class);
+    private final static Logger logger = LoggerFactory.getLogger(MainGameController.class);
     @FXML
     private Pane animationPanel;
     private Player spaceShip;
@@ -126,14 +126,13 @@ public class MainAppFXMLController {
         this.windowHeight = windowHeight;
     }
 
-    public MainAppFXMLController(Stage primaryStage) {
+    public MainGameController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
     
     
     @FXML
     public void initialize() {
-        logger.info("Initializing MainAppController...");
         
         // Create Player
         spaceShip = new Player(

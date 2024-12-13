@@ -5,9 +5,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- * Hp Bar for Invaders. This method is 2 rectangles that is used to illustrate
- * how much health left an Invader has, is updated each time the Invader is damaged.
- * It gets cleared out when the Invader dies.
+ * Hp Bar for Invaders. This method is a Pane containing 
+ * 2 rectangles that is used to illustrate how much health left an Invader has, 
+ * is updated each time the Invader is damaged. It gets cleared out when the 
+ * Invader dies.
  * @author Le Tuan Huy Nguyen
  */
 public class HpBar extends Pane{

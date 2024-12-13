@@ -34,8 +34,12 @@ public class MainMenuController {
 
     private Stage primaryStage;
     
-    private MainAppFXMLController gameController;
+    private MainGameController gameController;
     
+    /**
+     * Constructor for MainMenuController
+     * @param primaryStage the primary stage
+     */
     public MainMenuController(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
@@ -52,7 +56,7 @@ public class MainMenuController {
         // Add the ability to start the game to the start button
         playButton.setOnAction((event) -> {
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/fxml/MainApp_layout.fxml"));
-                gameController = new MainAppFXMLController(primaryStage);
+                gameController = new MainGameController(primaryStage);
                 loader.setController(gameController);
                 Pane gameRoot = null;
                 try {
@@ -75,11 +79,11 @@ public class MainMenuController {
         this.playButton = playButton;
     }
 
-    public MainAppFXMLController getGameController() {
+    public MainGameController getGameController() {
         return gameController;
     }
 
-    public void setGameController(MainAppFXMLController gameController) {
+    public void setGameController(MainGameController gameController) {
         this.gameController = gameController;
     }
 }

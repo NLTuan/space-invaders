@@ -53,7 +53,8 @@ public class BigBullet extends Sprite{
     }
     
     /**
-     * Updates the direction of the bullet based on where the target's position and a lagging term
+     * Updates the direction of the bullet based on where the target's position is 
+     * and a lagging term
      */
     public void updateDirection(){
         Vector position = new Vector(getTranslateX() + getFitWidth()/2, getTranslateY() + getFitHeight()/2);
