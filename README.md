@@ -17,6 +17,11 @@ This is a Space Invaders game, where you shoot invaders in your ship and win poi
 - Rotating bullets
 - Crazy mode
 
+## Implementation details
+I decided to split make the shooting sprites uniform under the FiringSprite class and the invaders uniform under the Invader class.
+I chose not to make a Bullet class simply because it has nothing special over the Sprite other than its type which can be inferred through the
+`type` String property. The BigBullet, however, has special properties that needs to be stored in its own class. 
+
 ## References
 - The Open Game Art project: https://opengameart.org/
 * https://opengameart.org/content/win-jingle 
