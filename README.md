@@ -1,27 +1,37 @@
-# JavaFX Project Template
+## About
 
-This is a non-modular, Gradle-based project skeleton for creating JavaFX applications.
+This is a Space Invaders game, where you shoot invaders in your ship and win points.
 
-It uses `JavaFX 20.0.2`, and includes the [Gradle Wrapper](https://docs.gradle.org/current/userguide/gradle_wrapper.html) (no need to install Gradle locally).
-
-## Features
-
-- JavaFX-aware coding assistance (code completion, search, navigation in JavaFX-specific source files)
-- Logging with [Logback](https://logback.qos.ch/).
-- Support for FXML.
-- Access to JavaFX's JavaDoc from within your IDE.
-
-## Using this Project Template
+## Running this Project
 
 1. Clone this repository
 2. Remove the `.git` directory 
 3. Add the cloned directory structure to your local repo (if you already have one)
 4. Open the project with NetBeans
-5. Using NetBeans, build the project to resolve the dependencies
-6. Change the project name in `settings.gradle`
-7. Rename the default Java package in `MainApp.java` and `MainAppController.java`.
-8. Change the value of the `mainClass` class property in `build.gradle`. A fully-qualified name of the class containing the main method that you want to run must be supplied.
+5. Using NetBeans, clean and build the project to resolve the dependencies
+6. Run the project using NetBeans
 
-## NetBeans
+## Extra features
+- Homing missiles for the boss
+- Health bar for the invaders
+- Rotating bullets
+- Crazy mode
 
-This project template was tested with `NetBeans 17` and `JDK 18`.
+## References
+- The Open Game Art project: https://opengameart.org/
+* https://opengameart.org/content/win-jingle 
+* https://opengameart.org/content/16x16-explosion 
+* https://opengameart.org/content/explosion-animation-1
+* https://www.myinstants.com/en/search/?name=Plants%20vs.%20Zombies 
+* https://opengameart.org/content/damage-taken 
+* https://opengameart.org/content/starsspace-background
+* https://opengameart.org/content/starsspace-background-colorful 
+* https://opengameart.org/content/dueling-stars 
+* https://opengameart.org/content/kl-peach-game-over-iii
+* https://opengameart.org/content/4-projectile-launches
+* https://opengameart.org/content/gun-reload-sounds 
+* https://opengameart.org/content/laser-fire dklon
+* https://opengameart.org/content/boom-pack-2 dklon
+* https://opengameart.org/content/another-pixel-explosion spring
+* https://opengameart.org/content/level-up-sound-effects Bart Kelsey
+- Kenney's game ressources: https://www.kenney.nl/assets/space-shooter-redux and https://www.kenney.nl/assets/space-shooter-extension

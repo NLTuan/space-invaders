@@ -41,18 +41,24 @@ public class GameManager {
         int numOfRows;
         switch (level % 3){
             case 1 -> {
-                enemiesPerRow = 7;
+                enemiesPerRow = (level/3 + 2) + 5;
                 numOfRows = 3;
                 int spacingX = (int)animPane.getWidth()/enemiesPerRow;
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
                 Vector topLeft = new Vector(spacingX/2, spacingY/2);
+    
                 for(int j = 0; j < numOfRows; j++){
                     for (int i = 0; i < enemiesPerRow; i++) {
-                        
+                        // This is only to follow the requirements, I personally don't like random spawning positions
+                        Vector randomOffset = new Vector(
+                            (Math.random() * 0.5 - 0.25) * spacingX, 
+                            (Math.random() * 0.5 - 0.25) * spacingY
+                        );
                         Invader invader = getRandomSmallInvader(
                                 (int)Math.round(Math.random()), 
-                                (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30,
+                                (int)(topLeft.getX() + i * spacingX + randomOffset.getX()),
+                                (int)(topLeft.getY() + j * spacingY + randomOffset.getY()),
+                                30, 30,
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                         );
@@ -67,7 +73,7 @@ public class GameManager {
                 }
             }
             case 2 -> {
-                enemiesPerRow = 5;
+                enemiesPerRow = (level/3 + 2) + 3;
                 numOfRows = 5;
                 int spacingX = (int)animPane.getWidth()/enemiesPerRow;
                 int spacingY = (int)(animPane.getHeight() * 0.5 / numOfRows);
@@ -75,11 +81,17 @@ public class GameManager {
                 for(int j = 0; j < numOfRows; j++){
                     for (int i = 0; i < enemiesPerRow; i++) {
                         Invader invader;
+                        
+                        Vector randomOffset = new Vector(
+                            (Math.random() * 0.5 - 0.25) * spacingX, 
+                            (Math.random() * 0.5 - 0.25) * spacingY
+                        );
                         if((i+j) % 2 == 0){
                             invader = getRandomSmallInvader(
                                 (int)Math.round(Math.random()), 
-                                (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30,
+                                (int)(topLeft.getX() + i * spacingX + randomOffset.getX()),
+                                (int)(topLeft.getY() + j * spacingY + randomOffset.getY()),
+                                30, 30,
                                 controller.getSmallInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
@@ -87,9 +99,10 @@ public class GameManager {
                         else{
                             invader = getRandomMediumInvader(
                                 (int)Math.round(Math.random()), 
-                                (int)topLeft.getX() + i * spacingX,
-                                (int)topLeft.getY() + j * spacingY, 30, 30,
-                                controller.getSmallInvaderSpeed(),
+                                (int)(topLeft.getX() + i * spacingX + randomOffset.getX()),
+                                (int)(topLeft.getY() + j * spacingY + randomOffset.getY()),
+                                30, 30,
+                                controller.getMediumInvaderSpeed(),
                                 controller.getEnemyBulletSpeed()
                             );
                         }
