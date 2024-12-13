@@ -39,6 +39,12 @@ public class MediumInvader1 extends Invader {
         setDeltaClock(Math.random() * 3);
     }
 
+    /**
+     * Shoot method for Medium Invader #1. Shoots 4 small projectiles
+     * it can either be in a plus (+) formation, cross (x) formation, or in an
+     * 8 point star formation.
+     * @return an ArrayList of bullets of type Sprite
+     */
     public ArrayList<Sprite> shoot() {
         
         AudioPlayer mediumLaserTune = new AudioPlayer("/sfx/mediumInvaderLaser.wav");
@@ -112,7 +118,13 @@ public class MediumInvader1 extends Invader {
 
         }
 
-
+    /**
+     * Movement update method for Medium Invader #1. This invader moves 
+     * left, right, up, or down. This invader moves down until a certain point,
+     * then goes back up, then goes back down at a certain point. On each time 
+     * this method is called, the invader changes direction to any other direction
+     * or stay the same
+     */
     public void updateMovement(){
         if (getTranslateY() + getFitHeight() > SpaceShooterApp.screenHeight * 0.8){
             movingUp = true;

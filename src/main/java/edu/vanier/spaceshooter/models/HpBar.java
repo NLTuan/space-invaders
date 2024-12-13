@@ -1,17 +1,14 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.spaceshooter.models;
 
-import javafx.scene.Node;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
 /**
- *
- * @author letua
+ * Hp Bar for Invaders. This method is 2 rectangles that is used to illustrate
+ * how much health left an Invader has, is updated each time the Invader is damaged.
+ * It gets cleared out when the Invader dies.
+ * @author Le Tuan Huy Nguyen
  */
 public class HpBar extends Pane{
 
@@ -22,6 +19,10 @@ public class HpBar extends Pane{
     
     private boolean dead = false;
 
+    /**
+     * Constructor for HpBar
+     * @param invader the invader of which to keep track the hp of
+     */
     public HpBar(Invader invader) {
         this.invader = invader;
         hpFull = new Rectangle(0, 0, invader.getFitWidth() * 1.5, invader.getFitHeight() * 0.2);
@@ -32,6 +33,10 @@ public class HpBar extends Pane{
         getChildren().add(hpCurr);
     }
     
+    /**
+     * Change how much the bar is filled depending on the health of the invader
+     * being kept track of
+     */
     public void updateBar(){
         hpFull.setTranslateX(invader.getTranslateX()- invader.getFitWidth()/4);
         hpFull.setTranslateY(invader.getTranslateY()- invader.getFitHeight()/4);

@@ -126,7 +126,7 @@ public class Player extends FiringSprite{
     }
 
     /**
-     * Toggle crazy mode.
+     * Toggle crazy mode by clicking 'L'.
      */
     public void toggleCrazyMode(){
         crazyMode = !crazyMode;
@@ -140,7 +140,7 @@ public class Player extends FiringSprite{
     
     /**
      * Update the max level of the player whenever they complete a stage under
-     * stage 3. Allow them to use higher level weapons
+     * stage 3. Allow them to use higher level weapons. Toggled by clicking 'E'.
      */
     public void levelUp(){
         if(maxStage < 3){

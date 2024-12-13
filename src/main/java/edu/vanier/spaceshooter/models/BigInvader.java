@@ -1,18 +1,9 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package edu.vanier.spaceshooter.models;
 
 import edu.vanier.geometry.Vector;
 import edu.vanier.helpers.AudioPlayer;
 import edu.vanier.spaceshooter.SpaceShooterApp;
-import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
 import java.util.ArrayList;
-import java.util.Random;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
-import javafx.scene.paint.Color;
 
 /**
  * BigInvader or Boss: Shoots 5 homing (BigBullet) missiles at the player, moves side to side only
@@ -56,6 +47,12 @@ public class BigInvader extends Invader{
 
     }
 
+    /**
+     * Shoot method for Big Invader. Shoots 5 BigBullets
+     * 3 big but slower direction bullets, and 2 smaller but quicker bullets.
+     * The bullets spread out at first then follow the player.
+     * @return an ArrayList of bullets of type Sprite
+     */
     public ArrayList<Sprite> shoot() {
         
         AudioPlayer bigLaserTune = new AudioPlayer("/sfx/bigInvaderLaser.wav");
@@ -129,6 +126,10 @@ public class BigInvader extends Invader{
         return bullets;
     }
 
+    /**
+     * Movement update method for Big Invader. This invader moves 
+     * left or right and switches direction at a certain width of the screen.
+     */
     public void updateMovement(){
         if (((getTranslateX() + getFitWidth() > SpaceShooterApp.screenWidth * 0.8) && xDir > 0)
                 || ((getTranslateX() < SpaceShooterApp.screenWidth * 0.2) && xDir < 0)

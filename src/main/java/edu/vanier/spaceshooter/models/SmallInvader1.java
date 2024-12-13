@@ -16,7 +16,7 @@ public class SmallInvader1 extends Invader{
     
     /**
      * Constructor for SmallInvader1
-     * @param x the x position os the sprite
+     * @param x the x position of the sprite
      * @param y the y position of the sprite
      * @param width the width of the sprite
      * @param height the height of the sprite
@@ -35,7 +35,10 @@ public class SmallInvader1 extends Invader{
         setDeltaClock(Math.random() * 3); // offset the movement of the small invaders
     }
 
-    
+    /**
+     * Shoot method for Small Invader #1. Shoots a square projectile straight down
+     * @return an ArrayList of bullets of type Sprite
+     */
     public ArrayList<Sprite> shoot() {
         AudioPlayer smallLaserTune = new AudioPlayer("/sfx/smallInvaderLaser.wav");
         smallLaserTune.play();
@@ -57,6 +60,11 @@ public class SmallInvader1 extends Invader{
         return bullets;
     }
 
+    /**
+     * Movement update method for Small Invader #1. This invader moves in random
+     * directions. If it is about to go out of the screen, its direction is flipped
+     * to make it go back in.
+     */
     public void updateMovement(){
         Random random = new Random();
         Vector direction = new Vector(random.nextDouble() * 2 - 1, random.nextDouble() * 2 - 1);

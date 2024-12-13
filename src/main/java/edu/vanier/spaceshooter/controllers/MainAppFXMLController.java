@@ -30,9 +30,8 @@ import org.slf4j.LoggerFactory;
  * FXML Controller class of the MainApp UI.
  * Controls the flow of the game and also the UI components
  * Handles animation and updates UI components accordingly
- * @param primaryStage the primary Stage
- * @author Le Tuan Huy Nguyen
  * 
+ * @author Le Tuan Huy Nguyen
  */
 public class MainAppFXMLController {
 

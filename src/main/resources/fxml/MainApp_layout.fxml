@@ -13,7 +13,7 @@
       <ImageView fx:id="bgImage" pickOnBounds="true" />
       <HBox fx:id="tipHBox" alignment="TOP_CENTER" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="600.0">
          <children>
-            <Text fx:id="tipText" fill="#ffffff80" strokeType="OUTSIDE" strokeWidth="0.0" text="Use WASD to move, SPACE to shoot, 'E' to switch weapons" textAlignment="RIGHT" />
+            <Text fill="#ffffff80" strokeType="OUTSIDE" strokeWidth="0.0" text="Use WASD to move, SPACE to shoot, 'E' to switch weapons, 'L' for crazy mode" textAlignment="RIGHT" />
          </children>
       </HBox>
       <VBox fx:id="gameOverVBox" alignment="CENTER" opacity="0.0" prefHeight="200.0" prefWidth="100.0" spacing="20.0">

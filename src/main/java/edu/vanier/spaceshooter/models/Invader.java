@@ -37,6 +37,9 @@ public abstract class Invader extends FiringSprite {
         
     }
 
+    /**
+     * Describes how the movement changes once a movement cycle is reached
+     */
     public abstract void updateMovement();
 
     /**

@@ -3,13 +3,9 @@ package edu.vanier.spaceshooter.models;
 import edu.vanier.geometry.Vector;
 import edu.vanier.helpers.AudioPlayer;
 import edu.vanier.spaceshooter.SpaceShooterApp;
-import edu.vanier.spaceshooter.controllers.MainAppFXMLController;
-import javafx.scene.paint.Color;
 
 import java.util.ArrayList;
 import java.util.Random;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 /**
  * Medium Invader #2: Moves either to the side or down, once it reached a certain point, it moves up
@@ -25,7 +21,7 @@ public class MediumInvader2 extends Invader {
 
     /**
      * Constructor for MediumInvader2
-     * @param x the x position os the sprite
+     * @param x the x position of the sprite
      * @param y the y position of the sprite
      * @param width the width of the sprite
      * @param height the height of the sprite
@@ -44,6 +40,12 @@ public class MediumInvader2 extends Invader {
         setDeltaClock(Math.random() * 3);
     }
 
+    /**
+     * Shoot method for Medium Invader #2. Shoots 4 small projectiles
+     * it can either be in a plus (+) formation, cross (x) formation, or in an
+     * 8 point star formation.
+     * @return an ArrayList of bullets of type Sprite
+     */
     public ArrayList<Sprite> shoot() {
         
         AudioPlayer mediumLaserTune = new AudioPlayer("/sfx/mediumInvaderLaser.wav");
@@ -118,6 +120,12 @@ public class MediumInvader2 extends Invader {
         }
 
 
+    /**
+     * Movement update method for Medium Invader #2. This invader moves diagonally
+     * up and down. This invader moves down until a certain point, then goes back
+     * up, then goes back down at a certain point. On each time this method is 
+     * called, the invader changes direction to left or right.
+     */
     public void updateMovement(){
         if (getTranslateY() + getFitHeight() > SpaceShooterApp.screenHeight * 0.8){
             movingUp = true;
@@ -127,7 +135,7 @@ public class MediumInvader2 extends Invader {
         }
         Random random = new Random();
         int cond = random.nextInt(4);
-        double x = 0, y = 0;
+        double x = 0, y = movingUp ? -1: 1;
         switch (cond){
             case 0 -> {
                 x = 1;
@@ -141,7 +149,6 @@ public class MediumInvader2 extends Invader {
                     x = 1;
                 }
             }
-            default -> y = movingUp ? -1: 1;
         }
         setDirection(new Vector(x, y));
     }
